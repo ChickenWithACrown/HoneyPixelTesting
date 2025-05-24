@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HoneyPixel Donations</title>
 <script src="https://www.paypal.com/sdk/js?client-id=AdtThNsXNlFhu8qEyQ2v0DuODtY-5ikr0cqGFJVgWdSwgo4HXJZTzxgP_wdGDuDFCKRE_l-fShMENu88"></script>
+<script src="https://js.stripe.com/v3/"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -124,6 +126,49 @@
     }
 
     renderPayPalButton(); // Init default
+
+    //stripe payment
+      const stripe = Stripe("pk_live_51RSFRpKCcjnqBpWjC1HRr6dbmfEut1CsTUuyUgdSKmLGXqheIwHuXWMOwNv6IlripgV9okkjgsYyxSUryecsSvI7007oVeryUB"); // Replace with your real publishable key
+
+  document.getElementById("stripe-donate-btn").addEventListener("click", async () => {
+    const customAmount = parseFloat(document.getElementById("customAmount").value);
+    const finalAmount = !isNaN(customAmount) && customAmount > 0 ? customAmount : amount;
+
+    const discord = prompt("Enter your Discord username:");
+    const message = prompt("Optional: Add a message for the team") || "";
+
+    if (!discord) {
+      alert("Please enter your Discord username.");
+      return;
+    }
+
+    // Get Firebase token if logged in
+    let idToken = null;
+    try {
+      const user = firebase?.auth()?.currentUser;
+      if (user) idToken = await user.getIdToken();
+    } catch (err) {
+      console.warn("No Firebase user logged in.");
+    }
+
+    try {
+      const response = await fetch("/create-stripe-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: finalAmount, discord, message, idToken })
+      });
+
+      const result = await response.json();
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        throw new Error(result.error || "Something went wrong with Stripe.");
+      }
+    } catch (err) {
+      alert(err.message);
+      console.error(err);
+    }
+  });
   </script>
 </body>
 </html>
