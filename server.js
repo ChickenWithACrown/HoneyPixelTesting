@@ -9,10 +9,10 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4";
 
-// 🧠 In-memory fallback
+// In-memory fallback
 const inMemoryDonations = {};
 
-// 🧩 Firebase Init
+// Firebase Admin Setup
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://honeypixel-1257f-default-rtdb.firebaseio.com/"
@@ -27,6 +27,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+// ✅ Serve donate.html from /donate route
+app.get("/donate", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "donate.html"));
+});
+
 // 📣 Discord embed
 function sendWebhook(title, description, color = 0x00ffcc) {
   const embed = {
@@ -39,12 +44,12 @@ function sendWebhook(title, description, color = 0x00ffcc) {
   });
 }
 
-// 🎯 Unified donation endpoint (with or without token)
+// 🎯 Donation endpoint (with optional Firebase token)
 app.post("/donation-initiate", async (req, res) => {
   const { discord, amount, message = "", idToken } = req.body;
 
   if (!discord || !amount) {
-    return res.status(400).json({ error: "Missing discord or amount." });
+    return res.status(400).json({ error: "Missing required fields." });
   }
 
   const donationId = Date.now().toString();
@@ -73,7 +78,7 @@ app.post("/donation-initiate", async (req, res) => {
   }
 });
 
-// 💳 Stripe Session
+// 💳 Create Stripe session
 app.post("/create-stripe-session", async (req, res) => {
   const { amount, discord, message = "", idToken } = req.body;
 
@@ -101,8 +106,8 @@ app.post("/create-stripe-session", async (req, res) => {
       }],
       metadata: { uid, email, discord, amount, message },
       mode: "payment",
-      success_url: "https://honeypixelmc.com/donate-success",
-      cancel_url: "https://honeypixelmc.com/donate-cancel",
+      success_url: "https://honeypixelmc.com/donate?success=true",
+      cancel_url: "https://honeypixelmc.com/donate?canceled=true",
     });
 
     const donationId = Date.now().toString();
@@ -118,14 +123,14 @@ app.post("/create-stripe-session", async (req, res) => {
   }
 });
 
-// 🧾 PayPal Webhook
+// 🧾 PayPal webhook
 app.post("/paypal-webhook", async (req, res) => {
   const event = req.body;
 
   if (event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
     const amount = event.resource.amount.value;
 
-    // 🔍 First check Firebase
+    // Check Firebase
     const snapshot = await db.ref("donations").once("value");
     let found = null;
 
@@ -142,7 +147,7 @@ app.post("/paypal-webhook", async (req, res) => {
       await db.ref(`donations/${found.uid}/${found.id}/confirmed`).set(true);
       await sendWebhook("✅ PayPal Donation Confirmed", `**User:** \`${found.discord}\`\n**Amount:** $${amount}\n**Email:** ${found.email}`);
     } else {
-      // 🧠 Check fallback in-memory
+      // Fallback to in-memory
       const match = Object.entries(inMemoryDonations)
         .sort((a, b) => b[1].timestamp - a[1].timestamp)
         .find(([, d]) => d.amount === amount);
@@ -157,7 +162,7 @@ app.post("/paypal-webhook", async (req, res) => {
   res.sendStatus(200);
 });
 
-// 🚀 Start server
+// 🚀 Launch
 app.listen(PORT, () => {
-  console.log(`✅ Hybrid server running on port ${PORT}`);
+  console.log(`✅ Server running at https://honeypixelmc.com on port ${PORT}`);
 });
