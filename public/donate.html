@@ -169,6 +169,29 @@
       console.error(err);
     }
   });
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("success") === "true") {
+        const discord = prompt("🎉 Thanks for donating! Enter your Discord username:");
+        const message = prompt("Add a message? (optional)") || "";
+    
+        if (discord) {
+          fetch("/donation-initiate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              discord,
+              amount: "0", // Replace or calculate if you track it
+              message
+            })
+          }).then(() => {
+            alert("✅ Discord info saved!");
+          }).catch(() => {
+            alert("⚠️ Could not save your info. Please contact support.");
+          });
+        }
+      }
+    });
   </script>
 </body>
 </html>
