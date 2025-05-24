@@ -326,31 +326,29 @@ header {
       <h1 class="minecraft-font text-2xl text-amber-900">HoneyPixelMC</h1>
     </div>
 
-    <!-- Mobile Toggle -->
-    <button class="md:hidden btn-minecraft ml-auto mt-3" onclick="toggleNav()">☰</button>
+      <!-- 🧭 Mobile-collapsible nav + auth buttons -->
+<div id="navMenu" class="w-full md:w-auto hidden md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mt-4 md:mt-0 items-center">
 
-    <!-- Navigation + Auth Section -->
-    <div id="navMenu" class="w-full md:w-auto hidden md:flex md:items-center md:space-x-3 mt-4 md:mt-0 flex-col md:flex-row space-y-2 md:space-y-0">
+  <!-- Navigation Links -->
+  <nav class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
+    <a href="#home" class="btn-minecraft px-4 py-2 minecraft-font text-xs">HOME</a>
+    <a href="#features" class="btn-minecraft px-4 py-2 minecraft-font text-xs">FEATURES</a>
+    <a href="#events" class="btn-minecraft px-4 py-2 minecraft-font text-xs">EVENTS</a>
+    <a href="/donate.html" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DONATE</a>
+    <a href="https://discord.gg/YU25e7Mn9b" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DISCORD</a>
+  </nav>
 
-      <!-- Main Nav Links -->
-      <nav class="flex flex-col md:flex-row items-center md:space-x-3 space-y-2 md:space-y-0">
-        <a href="#home" class="btn-minecraft px-4 py-2 minecraft-font text-xs">HOME</a>
-        <a href="#features" class="btn-minecraft px-4 py-2 minecraft-font text-xs">FEATURES</a>
-        <a href="#events" class="btn-minecraft px-4 py-2 minecraft-font text-xs">EVENTS</a>
-        <a href="/donate.html" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DONATE</a>
-        <a href="https://discord.gg/YU25e7Mn9b" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DISCORD</a>
-      </nav>
-
-      <!-- Utility Buttons -->
-      <div id="auth-section" class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2 mt-2 md:mt-0">
-        <button id="login-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs">LOGIN</button>
-        <span id="user-info" class="minecraft-font text-xs text-amber-900 hidden"></span>
-        <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden">LOGOUT</button>
-        <button id="theme-toggle" class="btn-minecraft px-4 py-2 minecraft-font text-xs">🌙 Dark Mode</button>
-        <button onclick="visitShop()" class="btn-minecraft px-4 py-2 minecraft-font text-xs">🛍️ SHOP</button>
-      </div>
-    </div>
+  <!-- Auth & Utility -->
+  <div id="auth-section" class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
+    <button id="login-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs">LOGIN</button>
+    <span id="user-info" class="minecraft-font text-xs text-amber-900 hidden"></span>
+    <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden">LOGOUT</button>
+    <button id="theme-toggle" class="btn-minecraft px-4 py-2 minecraft-font text-xs">🌙 Dark Mode</button>
+    <button onclick="visitShop()" class="btn-minecraft px-4 py-2 minecraft-font text-xs">🛍️ SHOP</button>
   </div>
+
+</div>
+
 </header>
 
 
@@ -402,7 +400,7 @@ header {
                 </div>
             </div>
             <div class="text-center mt-10 mb-8">
-                <img src="/image/Title.png" alt="Honey Lifesteal Logo" class="logo pixelated" />
+            <img src="/image/Title.png" alt="Honey Lifesteal Logo" class="logo pixelated mx-auto max-w-[90%] sm:max-w-[400px]" />
             </div>
 
             <p class="text-lg mb-8 max-w-2xl mx-auto text-gray-700 font-mono">
