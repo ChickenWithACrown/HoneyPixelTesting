@@ -8,7 +8,7 @@ const serviceAccount = require("./firebase-service.json"); // your Firebase Admi
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-const webhookURL = "https://discord.com/api/webhooks/YourWebhookURLHere"; // ⬅️ your webhook
+const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4"; 
 
 // Firebase Admin Init
 admin.initializeApp({
