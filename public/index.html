@@ -12,6 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <script src="https://www.paypal.com/sdk/js?client-id=AWhTexu2paInr5MSskUleb9RBE5rbSP3Rbwdcbxm8feY6XmT7dcSlowYD-wuny6WmNPIlz3MiXvgfOPn&currency=USD"></script>
+    
    <!--- SEO --->
     <meta name="description" content="HoneyPixelMC - Cozy Minecraft survival with economy, events, and community.">
     <meta name="keywords" content="Minecraft, server, survival, economy, lifesteal, HoneyPixelMC">
@@ -22,244 +23,177 @@
     <meta property="og:url" content="https://honeypixelmc.com">
     <meta name="theme-color" content="#facc15">
 
-    <style>
-    body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Segoe UI', sans-serif;
-}
+<style>
+  /* Base styles */
+  body {
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    background-color: #0f172a;
+    color: white;
+  }
 
-.minecraft-font {
-    font-family: 'Press Start 2P', cursive;
-}
-    .pixel-border {
-        border: 4px solid;
-        border-image: url("data:image/svg+xml,%3csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3e%3cdefs%3e%3cpattern id='a' patternUnits='userSpaceOnUse' width='10' height='10'%3e%3cpath d='M0 0h5v5H0zm5 5h5v5H5z' fill='%23000'/%3e%3c/pattern%3e%3c/defs%3e%3cpath fill='url(%23a)' d='M0 0h100v100H0z'/%3e%3c/svg%3e") 4;
-    }
+  .container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 1rem;
+  }
 
-    .minecraft-block {
-        background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #4a2c17 100%);
-        border: 2px solid #2d1810;
-        box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3), inset -2px -2px 4px rgba(0,0,0,0.3);
-    }
+  .minecraft-font {
+    font-family: 'Press Start 2P', monospace;
+    letter-spacing: 1px;
+  }
 
-    .grass-block {
-        background: linear-gradient(to bottom, #7cb342 0%, #7cb342 20%, #8d6e63 20%, #8d6e63 100%);
-        border: 2px solid #4a5d23;
-    }
+  header {
+    background-color: #1e293b;
+    padding: 1rem 0;
+    border-bottom: 3px solid #22c55e;
+  }
 
-    .stone-block {
-        background: linear-gradient(135deg, #757575 0%, #616161 50%, #424242 100%);
-        border: 2px solid #303030;
-    }
+  .logo {
+    height: 60px;
+    transition: transform 0.3s;
+  }
 
-    .gold-block {
-        background: linear-gradient(135deg, #ffd700 0%, #ffc107 50%, #ff8f00 100%);
-        border: 2px solid #e65100;
-        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    }
+  .logo:hover {
+    transform: scale(1.05);
+  }
 
-    .diamond-block {
-        background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 50%, #0288d1 100%);
-        border: 2px solid #01579b;
-        box-shadow: 0 0 15px rgba(79, 195, 247, 0.6);
-    }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 
-    .emerald-block {
-        background: linear-gradient(135deg, #4caf50 0%, #388e3c 50%, #2e7d32 100%);
-        border: 2px solid #1b5e20;
-        box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+  .btn-minecraft {
+    background-color: #22c55e;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .btn-minecraft:hover {
+    background-color: #16a34a;
+  }
+
+  /* Guide modal */
+  .modal {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    z-index: 50;
+  }
+
+  .modal-content {
+    background-color: #1e293b;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 500px;
+    width: 90%;
+  }
+
+  .modal-content h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-content p {
+    margin: 0.5rem 0;
+  }
+
+  .modal-close {
+    margin-top: 1rem;
+    background: #dc2626;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+  }
+
+  .modal-close:hover {
+    background-color: #b91c1c;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* Guide panel content */
+  .guide-panel {
+    background-color: #1e293b;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    text-align: left;
+  }
+
+  .guide-panel h3 {
+    margin-top: 0;
+    color: #22c55e;
+  }
+
+  /* Mobile/Tablet responsiveness */
+  @media (max-width: 768px) {
+    .minecraft-font {
+      font-size: 0.75rem !important;
     }
 
     .btn-minecraft {
-        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
-        border: 3px solid #3e2723;
-        color: white;
-        text-shadow: 2px 2px 0px #000;
-        transition: all 0.1s ease;
+      padding: 0.5rem 0.8rem !important;
+      font-size: 0.7rem;
     }
 
-    .btn-minecraft:hover {
-        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
-        transform: translateY(-2px);
-    }
-
-    .btn-minecraft:active {
-        transform: translateY(0px);
-        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
-    }
-
-    .pixelated {
-        image-rendering: pixelated;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: crisp-edges;
-    }
-
-    .minecraft-inventory {
-        background: #c6c6c6;
-        border: 3px solid #000;
-        box-shadow: inset 3px 3px 0px #fff, inset -3px -3px 0px #5a5a5a;
-    }
-
-    .inventory-slot {
-        width: 36px;
-        height: 36px;
-        background: #8b8b8b;
-        border: 2px solid #000;
-        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
-    }
-
-    .health-bar {
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
-    }
-
-    .creeper-bg {
-        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
-    }
-
-    .honey-drop {
-        width: 10px;
-        height: 20px;
-        background-color: #facc15;
-        border-radius: 0 0 100% 100%;
-        margin: 0 6px;
-        animation: dripDown 1.5s infinite ease-in-out;
-    }
-
-    .delay-100 { animation-delay: 0.1s; }
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-300 { animation-delay: 0.3s; }
-    .delay-400 { animation-delay: 0.4s; }
-
-    @keyframes dripDown {
-        0% {
-            transform: translateY(-8px) scaleY(0.5);
-            opacity: 0.5;
-        }
-        50% {
-            transform: translateY(8px) scaleY(1.2);
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(-8px) scaleY(0.5);
-            opacity: 0.5;
-        }
-    }
-
-    .drip-strip {
-        position: relative;
-        justify-content: center;
-    }
-
-    :root {
-        --bg-color: #ffffff;
-        --text-color: #000000;
-    }
-
-    [data-theme="dark"] {
-        --bg-color: #121212;
-        --text-color: #ffffff;
-    }
-
-    body {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        font-family: 'Segoe UI', sans-serif;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        margin: 0;
-    }
-
-    header {
-        padding: 1rem;
-        text-align: right;
-    }
-
-    button {
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-        border: none;
-        border-radius: 8px;
-        background-color: #ddd;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #ccc;
-    }
-
-    main {
-        text-align: center;
-        padding: 3rem;
-    }
-
-    /* ✅ NEW: Logo style */
     .logo {
-        display: block;
-        margin: 0 auto;
-        width: 300px;
-        max-width: 90%;
-        height: auto;
+      width: 180px;
+      height: auto;
     }
-            @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-5px); }
-      40%, 80% { transform: translateX(5px); }
+
+    nav {
+      flex-direction: column;
+      align-items: flex-start;
     }
-    .animate-shake {
-      animation: shake 0.4s ease;
+
+    header .container {
+      flex-direction: column;
+      align-items: flex-start;
     }
-[data-theme="dark"] .minecraft-inventory {
-  background-color: #1e1e1e !important;
-  color: #f0f0f0 !important;
-}
-[data-theme="dark"] .bg-white {
-  background-color: #2c2c2c !important;
-}
-[data-theme="dark"] .text-gray-800 {
-  color: #ddd !important;
-}
-[data-theme="dark"] .btn-minecraft {
-  background: linear-gradient(to bottom, #3d3d3d 0%, #2c2c2c 100%);
-  color: #fff;
-  border-color: #000;
-}
-/* Base styles */
-:root {
-  --bg-color: #f5f5f5; /* light default */
-  --text-color: #111;
-}
 
-[data-theme="light"] body {
-  background-image: url('surface-light.png');
-  background-size: cover;
-  background-attachment: fixed;
-}
+    #auth-section {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
 
-[data-theme="dark"] body {
-  background-image: url('cave-dark.png');
-  background-size: cover;
-  background-attachment: fixed;
-}
+    .modal-content {
+      padding: 1.2rem;
+    }
+  }
 
+  @media (max-width: 480px) {
+    .logo {
+      width: 150px;
+    }
 
-/* Apply background and text globally */
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+    .btn-minecraft {
+      width: 100%;
+      text-align: center;
+    }
 
-/* Optional: style modals/forms/containers */
-.modal-content,
-#auth-modal,
-form,
-.section-box {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  border: 1px solid #ccc;
-}
-
+    .guide-panel {
+      padding: 1rem;
+    }
+  }
 </style>
+
 
 </head>
 <body class="bg-green-100 text-gray-900 font-mono creeper-bg">
