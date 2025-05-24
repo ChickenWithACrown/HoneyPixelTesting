@@ -702,7 +702,55 @@ updateServerInfo();
 setInterval(updateServerInfo, 15000);
 
 // ========================
-// 🎛️ UI Elements
+// 🌙 Theme Toggle
+// ========================
+const toggleBtn = document.getElementById("theme-toggle");
+const root = document.documentElement;
+const savedTheme = localStorage.getItem("theme") || "light";
+root.setAttribute("data-theme", savedTheme);
+if (toggleBtn) toggleBtn.textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+
+if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+        const current = root.getAttribute("data-theme");
+        const newTheme = current === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        toggleBtn.textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+    });
+}
+
+// ========================
+// 📱 Mobile Nav Toggle
+// ========================
+function toggleNav() {
+    const nav = document.querySelector('.nav-menu');
+    if (nav) nav.classList.toggle('show');
+}
+
+// ========================
+// 📎 Utility Button Functions
+// ========================
+function visitShop() {
+    window.open("https://honeypixelmc.com/shop", "_blank");
+}
+function openGuideModal() {
+    const modal = document.getElementById("guide-modal");
+    if (modal) modal.classList.remove("hidden");
+}
+function openRulesModal() {
+    const modal = document.getElementById("rules-modal");
+    if (modal) modal.classList.remove("hidden");
+}
+function copyServerIP() {
+    const ip = "play.honeypixelmc.com";
+    navigator.clipboard.writeText(ip)
+        .then(() => alert(`✅ Server IP copied: ${ip}`))
+        .catch(() => alert("⚠️ Could not copy IP."));
+}
+
+// ========================
+// 🔐 Auth Modal Elements
 // ========================
 const loginBtn = document.getElementById('login-btn');
 const logoutBtn = document.getElementById('logout-btn');
@@ -710,11 +758,6 @@ const userInfo = document.getElementById('user-info');
 const devTabs = document.getElementById('dev-tabs');
 const tabContents = document.querySelectorAll('.tab-content');
 
-let currentTab = null;
-
-// ========================
-// 🔐 Auth Modal Elements
-// ========================
 const authModal = document.getElementById('auth-modal');
 const closeAuthModal = document.getElementById('close-auth-modal');
 const authForm = document.getElementById('auth-form');
@@ -728,26 +771,6 @@ const googleAuthBtn = document.getElementById('google-auth-btn');
 
 let isLoginMode = true;
 
-// ========================
-// 🌙 Light/Dark Theme Toggle
-// ========================
-const toggleBtn = document.getElementById("theme-toggle");
-const root = document.documentElement;
-const savedTheme = localStorage.getItem("theme") || "light";
-root.setAttribute("data-theme", savedTheme);
-toggleBtn.textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
-
-toggleBtn.addEventListener("click", () => {
-    const current = root.getAttribute("data-theme");
-    const newTheme = current === "dark" ? "light" : "dark";
-    root.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    toggleBtn.textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
-});
-
-// ========================
-// 🧠 Auth Modal Logic
-// ========================
 loginBtn.onclick = () => {
     authModal.classList.remove('hidden');
     isLoginMode = true;
@@ -765,6 +788,7 @@ toggleAuthMode.onclick = (e) => {
     authError.textContent = '';
     authForm.reset();
 };
+
 function setAuthMode() {
     if (isLoginMode) {
         authModalTitle.textContent = 'Login';
@@ -790,7 +814,7 @@ async function ensureUserInRealtimeDB(user) {
 }
 
 // ========================
-// 🧾 Email/Password Submit
+// 📩 Email/Password Submit
 // ========================
 authForm.onsubmit = async (e) => {
     e.preventDefault();
@@ -846,8 +870,6 @@ logoutBtn.onclick = () => auth.signOut();
 // ========================
 auth.onAuthStateChanged(async user => {
     console.log("Auth state changed:", user);
-
-    // Safe reference for dev-tab
     const devTab = document.getElementById("dev-tab");
 
     if (user) {
@@ -875,7 +897,7 @@ auth.onAuthStateChanged(async user => {
 
         if (role === "dev") {
             if (devTab) devTab.classList.remove("hidden");
-            loadAllUsers(); // Load developer tools
+            loadAllUsers?.();
         } else {
             if (devTab) devTab.classList.add("hidden");
         }
@@ -891,7 +913,7 @@ auth.onAuthStateChanged(async user => {
 // ========================
 // 💸 Donation Submission
 // ========================
-document.getElementById("donation-form").addEventListener("submit", async (e) => {
+document.getElementById("donation-form")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const discord = document.getElementById("donor-discord").value.trim();
@@ -934,10 +956,7 @@ document.getElementById("donation-form").addEventListener("submit", async (e) =>
     errorBox.classList.remove("hidden");
   }
 });
-
-
 </script>
-
 
 </body>
 </html>
