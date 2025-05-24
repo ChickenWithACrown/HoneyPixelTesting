@@ -288,6 +288,26 @@
        
     </header>
 
+        <section id="dev" class="hidden tab-content py-16 px-6 text-center">
+          <div class="container mx-auto">
+            <h2 class="minecraft-font text-3xl mb-6 text-green-700">🛠️ Developer Tools</h2>
+            <p class="font-mono text-gray-800">Manage users and view payments below:</p>
+        
+            <!-- User List -->
+            <div id="user-list" class="mt-6 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
+              <p class="text-amber-800 minecraft-font mb-2">🔐 User Accounts:</p>
+              <div id="user-list-container">Loading users...</div>
+            </div>
+        
+            <!-- Payment History -->
+            <div id="payment-history" class="mt-10 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
+              <p class="text-amber-800 minecraft-font mb-2">💰 Payment Records:</p>
+              <div id="payment-container">Select a user to view donations.</div>
+            </div>
+          </div>
+        </section>
+
+
     <!-- Login/Signup Modal -->
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden">
         <div class="minecraft-inventory rounded-lg p-8 bg-white relative w-full max-w-xs">
@@ -774,14 +794,25 @@
 
     logoutBtn.onclick = () => auth.signOut();
 
-    function visitShop() {
-        const user = auth.currentUser;
-        if (!user) {
-            showToast("🔒 You must be logged in to visit the shop.");
-            return;
-        }
-        window.open("https://store.honeypixelmc.com", "_blank");
+function showToast(message) {
+    const toast = document.createElement("div");
+    toast.textContent = message;
+    toast.className = "minecraft-font fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-700 text-white px-6 py-3 rounded border-4 border-black z-50 shadow-lg";
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+function visitShop() {
+    const user = auth.currentUser;
+    if (!user) {
+        showToast("🔒 You must be logged in to visit the shop.");
+        return;
     }
+    window.open("https://store.honeypixelmc.com", "_blank");
+}
+
 
     function initiateDonation() {
         const discord = prompt("Enter your Discord tag (e.g. User#1234):");
@@ -823,6 +854,80 @@
             }, 100);
         });
     });
+
+    //dev
+    async function loadAllUsers() {
+    const container = document.getElementById("user-list-container");
+    container.textContent = "Loading users...";
+
+    try {
+        const snapshot = await db.ref("users").get();
+        if (!snapshot.exists()) {
+            container.textContent = "No users found.";
+            return;
+        }
+
+        const users = snapshot.val();
+        container.innerHTML = "";
+
+        Object.entries(users).forEach(([uid, data]) => {
+            const div = document.createElement("div");
+            div.className = "p-4 border-l-4 border-green-700 bg-green-50 rounded cursor-pointer hover:bg-green-100";
+            div.innerHTML = `
+                <strong>UID:</strong> ${uid}<br>
+                <strong>Email:</strong> ${data.email || "N/A"}<br>
+                <strong>Role:</strong> ${data.role || "N/A"}
+                <br><em>Click to view donations</em>
+            `;
+            div.onclick = () => loadUserPayments(uid);
+            container.appendChild(div);
+        });
+
+    } catch (err) {
+        console.error("Failed to load users:", err);
+        container.textContent = "Error loading users.";
+    }
+}
+async function loadUserPayments(uid) {
+    const container = document.getElementById("payment-container");
+    container.textContent = "Loading donations...";
+
+    try {
+        const snapshot = await db.ref("donations/" + uid).get();
+        if (!snapshot.exists()) {
+            container.textContent = "No donation records found.";
+            return;
+        }
+
+        const donations = snapshot.val();
+        container.innerHTML = "";
+
+        let total = 0;
+        const sorted = Object.entries(donations).sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
+
+        sorted.forEach(([id, data]) => {
+            total += parseFloat(data.amount || 0);
+            const div = document.createElement("div");
+            div.className = "p-3 bg-yellow-50 border-l-4 border-yellow-600 rounded mb-2";
+            div.innerHTML = `
+                <strong>Amount:</strong> $${data.amount}<br>
+                <strong>Discord:</strong> ${data.discord || "N/A"}<br>
+                <strong>Message:</strong> ${data.message || "None"}<br>
+                <strong>Date:</strong> ${new Date(data.timestamp || Date.now()).toLocaleString()}
+            `;
+            container.appendChild(div);
+        });
+
+        const summary = document.createElement("div");
+        summary.className = "mt-4 font-bold text-green-800";
+        summary.innerHTML = `<strong>Total Donated:</strong> $${total.toFixed(2)}`;
+        container.appendChild(summary);
+
+    } catch (err) {
+        console.error("Error loading payments:", err);
+        container.textContent = "Failed to load donation history.";
+    }
+}
 
     // Register functions globally for onclick=""
     window.openGuideModal = openGuideModal;
