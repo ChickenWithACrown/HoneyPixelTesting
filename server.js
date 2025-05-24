@@ -20,25 +20,30 @@ admin.initializeApp({
 });
 const db = admin.database();
 
-// ✅ Stripe webhook requires raw body
-app.post("/stripe-webhook", express.raw({ type: "application/json" }), (req, res) => {
+app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (req, res) => {
   const sig = req.headers["stripe-signature"];
+  const stripeWebhookSecret = "whsec_OxU91TwSj9f3DA71o9AHkXS2onFzd1Id";
+
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
   } catch (err) {
-    console.error("⚠️ Stripe signature verification failed.", err.message);
-    return res.sendStatus(400);
+    console.error("⚠️ Stripe signature verification failed:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
-
+  // ✅ Handle the event
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const { uid, email, discord, amount } = session.metadata || {};
 
+    console.log(`✅ Stripe checkout.session.completed for ${email} / $${amount}`);
+
     if (uid && session.payment_status === "paid") {
-      const donationRef = db.ref(`donations/${uid}`);
-      donationRef.orderByChild("email").equalTo(email).once("value", snapshot => {
+      try {
+        const donationRef = db.ref(`donations/${uid}`);
+        const snapshot = await donationRef.once("value");
+
         snapshot.forEach(childSnap => {
           const d = childSnap.val();
           if (d.amount == amount && d.discord === discord && !d.confirmed) {
@@ -46,7 +51,14 @@ app.post("/stripe-webhook", express.raw({ type: "application/json" }), (req, res
             sendWebhook("✅ Stripe Donation Confirmed", `**User:** \`${discord}\`\n**Amount:** $${amount}\n**Email:** ${email}`);
           }
         });
-      });
+      } catch (dbError) {
+        console.error("❌ Error confirming Stripe donation in Firebase:", dbError);
+      }
+    }
+  }
+
+  res.sendStatus(200);
+});
     }
   }
 
