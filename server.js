@@ -146,7 +146,7 @@ app.post("/create-stripe-session", async (req, res) => {
       }],
       metadata: { uid, email, discord, amount, message },
       mode: "payment",
-      success_url: "https://honeypixelmc.com/donate?success=true",
+      success_url: "https://honeypixelmc.com/donate.html?success=true",
       cancel_url: "https://honeypixelmc.com/donate?canceled=true",
     });
 
