@@ -8,6 +8,7 @@ const serviceAccount = require("./Key.json");
 const app = express();
 const PORT = process.env.PORT || 10000;
 const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4";
+event = stripe.webhooks.constructEvent(req.body, sig, "whsec_OxU91TwSj9f3DA71o9AHkXS2onFzd1Id");
 
 // In-memory fallback
 const inMemoryDonations = {};
@@ -19,6 +20,40 @@ admin.initializeApp({
 });
 const db = admin.database();
 
+// ✅ Stripe webhook requires raw body
+app.post("/stripe-webhook", express.raw({ type: "application/json" }), (req, res) => {
+  const sig = req.headers["stripe-signature"];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
+  } catch (err) {
+    console.error("⚠️ Stripe signature verification failed.", err.message);
+    return res.sendStatus(400);
+  }
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const { uid, email, discord, amount } = session.metadata || {};
+
+    if (uid && session.payment_status === "paid") {
+      const donationRef = db.ref(`donations/${uid}`);
+      donationRef.orderByChild("email").equalTo(email).once("value", snapshot => {
+        snapshot.forEach(childSnap => {
+          const d = childSnap.val();
+          if (d.amount == amount && d.discord === discord && !d.confirmed) {
+            donationRef.child(childSnap.key).update({ confirmed: true });
+            sendWebhook("✅ Stripe Donation Confirmed", `**User:** \`${discord}\`\n**Amount:** $${amount}\n**Email:** ${email}`);
+          }
+        });
+      });
+    }
+  }
+
+  res.sendStatus(200);
+});
+
+// ✅ Must come after raw body parser
 app.use(express.json());
 app.use("/image", express.static(path.join(__dirname, "image")));
 app.use(express.static(path.join(__dirname, "public")));
@@ -27,12 +62,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ✅ Serve donate.html from /donate route
 app.get("/donate", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "donate.html"));
 });
 
-// 📣 Discord embed
+// 📣 Discord embed helper
 function sendWebhook(title, description, color = 0x00ffcc) {
   const embed = {
     embeds: [{ title, description, color, timestamp: new Date().toISOString() }],
@@ -44,7 +78,7 @@ function sendWebhook(title, description, color = 0x00ffcc) {
   });
 }
 
-// 🎯 Donation endpoint (with optional Firebase token)
+// 🧾 Donation Endpoint
 app.post("/donation-initiate", async (req, res) => {
   const { discord, amount, message = "", idToken } = req.body;
 
@@ -78,7 +112,7 @@ app.post("/donation-initiate", async (req, res) => {
   }
 });
 
-// 💳 Create Stripe session
+// 💳 Stripe Checkout
 app.post("/create-stripe-session", async (req, res) => {
   const { amount, discord, message = "", idToken } = req.body;
 
@@ -123,14 +157,13 @@ app.post("/create-stripe-session", async (req, res) => {
   }
 });
 
-// 🧾 PayPal webhook
+// 🅿️ PayPal Webhook
 app.post("/paypal-webhook", async (req, res) => {
   const event = req.body;
 
   if (event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
     const amount = event.resource.amount.value;
 
-    // Check Firebase
     const snapshot = await db.ref("donations").once("value");
     let found = null;
 
@@ -147,7 +180,6 @@ app.post("/paypal-webhook", async (req, res) => {
       await db.ref(`donations/${found.uid}/${found.id}/confirmed`).set(true);
       await sendWebhook("✅ PayPal Donation Confirmed", `**User:** \`${found.discord}\`\n**Amount:** $${amount}\n**Email:** ${found.email}`);
     } else {
-      // Fallback to in-memory
       const match = Object.entries(inMemoryDonations)
         .sort((a, b) => b[1].timestamp - a[1].timestamp)
         .find(([, d]) => d.amount === amount);
@@ -162,7 +194,7 @@ app.post("/paypal-webhook", async (req, res) => {
   res.sendStatus(200);
 });
 
-// 🚀 Launch
+// 🚀 Start Server
 app.listen(PORT, () => {
   console.log(`✅ Server running at https://honeypixelmc.com on port ${PORT}`);
 });
