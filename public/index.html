@@ -223,6 +223,32 @@
   color: #fff;
   border-color: #000;
 }
+.bg-surface {
+    background: url('https://i.imgur.com/wP3X4IE.png') no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.bg-dirt {
+    background: url('https://i.imgur.com/pT5ctWN.png') repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.bg-stone {
+    background: url('https://i.imgur.com/NphQSkY.png') repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.bg-cave {
+    background: url('https://i.imgur.com/W9yAXkT.png') repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.bg-lava {
+    background: url('https://i.imgur.com/bCRUP7C.png') repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
 
 </style>
 
@@ -776,6 +802,8 @@
                 auth.signOut();
             };
             
+            //auth donate
+            function initiateDonation() {
                 const discord = prompt("Enter your Discord tag (e.g. User#1234):");
                 const amount = prompt("Enter donation amount ($USD):");
                 const message = prompt("Optional message (leave blank to skip):");
@@ -785,44 +813,31 @@
                     return;
                 }
             
-                const user = auth.currentUser;
+                const user = firebase.auth().currentUser;
                 if (!user) {
-                    showToast("🔒 You must be logged in to donate.");
+                    alert("🔒 You must be logged in to donate.");
                     return;
                 }
-                
-                const idToken = await user.getIdToken(); // 🔐 get secure Firebase token
-                
-                const res = await fetch("/donation-initiate", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        discord,
-                        amount,
-                        message,
-                        idToken // ✅ use this instead of uid/email directly
-                    })
-                });
-
-                const idToken = await user.getIdToken();
-                const res = await fetch("/create-stripe-session", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        amount,
-                        discord,
-                        message,
-                        idToken
-                    })
-                });
             
-                const data = await res.json();
-                if (data.success) {
-                    showToast("✅ Donation started!");
-                    window.location.href = `https://backend-khwc.onrender.com?amount=${encodeURIComponent(amount)}`;
-                } else {
-                    alert("Error: " + data.error);
-                }
+                user.getIdToken().then(idToken => {
+                    fetch("/create-stripe-session", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            amount,
+                            discord,
+                            message,
+                            idToken
+                        })
+                    }).then(res => res.json()).then(data => {
+                        if (data.success) {
+                            alert("✅ Donation started!");
+                            window.location.href = `https://backend-khwc.onrender.com?amount=${encodeURIComponent(amount)}`;
+                        } else {
+                            alert("Error: " + data.error);
+                        }
+                    });
+                });
             }
 
 
@@ -1035,16 +1050,21 @@
                     menu.classList.toggle('hidden');
                     };
             
-                function visitShop() {
-                const user = auth.currentUser;
-                if (!user) {
-                    showToast("🔒 You must be logged in to visit the shop.");
-                    return;
-                }
-                window.open("https://store.honeypixelmc.com", "_blank");
-            }
+                    function visitShop() {
+                        const user = auth.currentUser;
+                        if (!user) {
+                            showToast("🔒 You must be logged in to visit the shop.");
+                            return;
+                        }
+                        window.open("https://store.honeypixelmc.com", "_blank");
+                    }
                 });
             });
+            window.openGuideModal = openGuideModal;
+            window.closeGuideModal = closeGuideModal;
+            window.visitShop = visitShop;
+            window.initiateDonation = initiateDonation;
+
         
     </script>
 </body>
