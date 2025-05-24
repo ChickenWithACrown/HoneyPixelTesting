@@ -511,28 +511,21 @@ form,
         </div>
     </section>
 
-    <!-- Donation Section -->
-    <section id="donate" class="py-16 px-4 creeper-bg">
-      <div class="container mx-auto text-center">
-        <h2 class="minecraft-font text-3xl mb-6 text-green-800">SUPPORT THE SERVER</h2>
-        <p class="text-lg mb-10 max-w-xl mx-auto text-gray-700 font-mono">
-          &gt; Help us keep HoneyPixelMC alive and thriving.<br />
-          &gt; Every dollar supports server costs, events, and future features.<br />
-          &gt; No pay-to-win, just pure love for the community! 🐝💚
-        </p>
-    
-        <form id="donation-form" class="max-w-md mx-auto text-left font-mono space-y-4">
-          <input type="text" id="donor-discord" placeholder="Discord Username" class="w-full p-2 border rounded" required />
-          <input type="number" step="0.01" id="donor-amount" placeholder="Amount (USD)" class="w-full p-2 border rounded" required />
-          <input type="text" id="donor-message" placeholder="Message (Optional)" class="w-full p-2 border rounded" />
-          <button type="submit" class="btn-minecraft w-full py-3 text-lg">Donate</button>
-          <div id="donation-error" class="text-red-600 text-sm mt-2 hidden"></div>
-        </form>
-    
-        <div id="donation-success" class="text-green-700 font-bold mt-6 hidden">🎉 Thank you for your support!</div>
-      </div>
-    </section>
-
+        <!-- Donation Section -->
+        <section id="donate" class="py-16 px-4 creeper-bg">
+          <div class="container mx-auto text-center">
+            <h2 class="minecraft-font text-3xl mb-6 text-green-800">SUPPORT THE SERVER</h2>
+            <p class="text-lg mb-10 max-w-xl mx-auto text-gray-700 font-mono leading-relaxed">
+              &gt; Help us keep HoneyPixelMC alive and thriving.<br />
+              &gt; Every dollar supports server costs, events, and future features.<br />
+              &gt; No pay-to-win, just pure love for the community! 🐝💚
+            </p>
+        
+            <a href="/donate.html" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded text-lg shadow-md transition-all duration-150">
+              Go to Donation Page
+            </a>
+          </div>
+        </section>
 
     <!-- Contact Modal -->
     <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
