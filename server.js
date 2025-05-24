@@ -8,12 +8,12 @@ const serviceAccount = require("./Key.json");
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4"; 
+const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4";
 
 // Firebase Admin Init
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://honeypixel-1257f-default-rtdb.firebaseio.com"
+  databaseURL: "https://honeypixel-1257f-default-rtdb.firebaseio.com/"
 });
 const db = admin.database();
 
@@ -37,25 +37,29 @@ function sendWebhook(title, description, color = 0x00ffcc) {
   });
 }
 
-// POST: /donation-initiate
+// POST: /donation-initiate (with token validation)
 app.post("/donation-initiate", async (req, res) => {
-  const { discord, amount, message = "", uid, email } = req.body;
+  const { discord, amount, message = "", idToken } = req.body;
 
-  if (!discord || !amount || !uid || !email) {
+  if (!discord || !amount || !idToken) {
     return res.status(400).json({ error: "Missing required fields." });
   }
 
-  const donationId = Date.now().toString();
-  const donationData = {
-    discord,
-    amount,
-    message,
-    email,
-    confirmed: false,
-    timestamp: Date.now(),
-  };
-
   try {
+    const decoded = await admin.auth().verifyIdToken(idToken);
+    const uid = decoded.uid;
+    const email = decoded.email;
+
+    const donationId = Date.now().toString();
+    const donationData = {
+      discord,
+      amount,
+      message,
+      email,
+      confirmed: false,
+      timestamp: Date.now(),
+    };
+
     await db.ref(`donations/${uid}/${donationId}`).set(donationData);
 
     const desc = `**User:** \`${discord}\`\n**Amount:** $${amount}\n**Email:** ${email}${message ? `\n**Note:** ${message}` : ""}`;
@@ -63,20 +67,24 @@ app.post("/donation-initiate", async (req, res) => {
 
     res.json({ success: true, id: donationId });
   } catch (err) {
-    console.error("❌ Firebase/webhook error:", err);
-    res.status(500).json({ error: "Server error" });
+    console.error("❌ Token verification failed:", err);
+    res.status(403).json({ error: "Invalid or expired token" });
   }
 });
 
-// POST: /create-stripe-session
+// POST: /create-stripe-session (with token validation)
 app.post("/create-stripe-session", async (req, res) => {
-  const { amount, uid, email, discord, message } = req.body;
+  const { amount, discord, message = "", idToken } = req.body;
 
-  if (!amount || !uid || !email || !discord) {
-    return res.status(400).json({ error: "Missing Stripe donation info" });
+  if (!amount || !discord || !idToken) {
+    return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
+    const decoded = await admin.auth().verifyIdToken(idToken);
+    const uid = decoded.uid;
+    const email = decoded.email;
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [{
@@ -112,8 +120,8 @@ app.post("/create-stripe-session", async (req, res) => {
 
     res.json({ url: session.url });
   } catch (err) {
-    console.error("❌ Stripe error:", err);
-    res.status(500).json({ error: "Stripe failed" });
+    console.error("❌ Stripe/token error:", err);
+    res.status(403).json({ error: "Invalid or expired token" });
   }
 });
 
