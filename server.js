@@ -6,18 +6,17 @@ const PORT = process.env.PORT || 10000;
 
 const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4";
 
-// In-memory donation store: { id: { discord, amount, timestamp } }
+// In-memory donation store
 const donations = {};
 
 app.use(express.json());
 
-// Serve static frontend (if any)
+// ✅ Serve static folders
+app.use("/image", express.static(path.join(__dirname, "image"))); // <--- Moved here
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
-app.use("/image", express.static(path.join(__dirname, "image")));
-
 });
 
 // 📥 New donation started
@@ -64,9 +63,8 @@ app.post("/paypal-webhook", (req, res) => {
   if (event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
     const amount = event.resource.amount.value;
 
-    // Find the most recent donation that matches the amount
     const matchEntry = Object.entries(donations)
-      .sort((a, b) => b[1].timestamp - a[1].timestamp) // Most recent first
+      .sort((a, b) => b[1].timestamp - a[1].timestamp)
       .find(([, d]) => d.amount === amount);
 
     const discord = matchEntry ? matchEntry[1].discord : "Unknown";
