@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 10000;
 const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4";
 const stripeWebhookSecret = "whsec_OxU91TwSj9f3DA71o9AHkXS2onFzd1Id";
 
-// In-memory fallback
+// In-memory fallback for anonymous users
 const inMemoryDonations = {};
 
 // Firebase Admin Setup
@@ -20,7 +20,7 @@ admin.initializeApp({
 });
 const db = admin.database();
 
-// ✅ Stripe Webhook Handler (MUST BE ABOVE express.json)
+// Stripe Webhook - must come BEFORE express.json()
 app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (req, res) => {
   const sig = req.headers["stripe-signature"];
   let event;
@@ -36,7 +36,7 @@ app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (re
     const session = event.data.object;
     const { uid, email, discord, amount } = session.metadata || {};
 
-    console.log(`✅ Stripe checkout.session.completed for ${email} / $${amount}`);
+    console.log(`✅ Stripe checkout.session.completed for ${email || "Guest"} / $${amount}`);
 
     if (uid && session.payment_status === "paid") {
       try {
@@ -51,15 +51,17 @@ app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (re
           }
         });
       } catch (dbError) {
-        console.error("❌ Error confirming Stripe donation in Firebase:", dbError);
+        console.error("❌ Firebase update error:", dbError);
       }
+    } else {
+      await sendWebhook("✅ Stripe Donation Confirmed (Guest)", `**User:** \`${discord || "Unknown"}\`\n**Amount:** $${amount}`);
     }
   }
 
   res.sendStatus(200);
 });
 
-// ✅ Must come after express.raw
+// Must come after raw parser
 app.use(express.json());
 app.use("/image", express.static(path.join(__dirname, "image")));
 app.use(express.static(path.join(__dirname, "public")));
@@ -72,7 +74,7 @@ app.get("/donate", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "donate.html"));
 });
 
-// 📣 Discord embed helper
+// Discord embed helper
 function sendWebhook(title, description, color = 0x00ffcc) {
   const embed = {
     embeds: [{ title, description, color, timestamp: new Date().toISOString() }],
@@ -84,7 +86,7 @@ function sendWebhook(title, description, color = 0x00ffcc) {
   });
 }
 
-// 🧾 Donation Endpoint
+// POST: /donation-initiate (used for Discord + message prompt)
 app.post("/donation-initiate", async (req, res) => {
   const { discord, amount, message = "", idToken } = req.body;
 
@@ -112,25 +114,34 @@ app.post("/donation-initiate", async (req, res) => {
       return res.status(403).json({ error: "Invalid token" });
     }
   } else {
-    inMemoryDonations[donationId] = { discord, amount, timestamp };
+    inMemoryDonations[donationId] = { discord, amount, message, timestamp };
     await sendWebhook("💚 New Donation (Guest)", `**User:** \`${discord}\`\n**Amount:** $${amount}`);
     return res.json({ success: true, id: donationId });
   }
 });
 
-// 💳 Stripe Checkout
+// POST: /create-stripe-session
 app.post("/create-stripe-session", async (req, res) => {
   const { amount, discord, message = "", idToken } = req.body;
 
-  if (!amount || !discord || !idToken) {
+  if (!amount || !discord) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  try {
-    const decoded = await admin.auth().verifyIdToken(idToken);
-    const uid = decoded.uid;
-    const email = decoded.email;
+  let uid = null;
+  let email = null;
 
+  if (idToken) {
+    try {
+      const decoded = await admin.auth().verifyIdToken(idToken);
+      uid = decoded.uid;
+      email = decoded.email;
+    } catch (err) {
+      console.warn("⚠️ Invalid or expired Firebase token. Proceeding as guest.");
+    }
+  }
+
+  try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [{
@@ -144,26 +155,28 @@ app.post("/create-stripe-session", async (req, res) => {
         },
         quantity: 1,
       }],
-      metadata: { uid, email, discord, amount, message },
+      metadata: { uid: uid || "", email: email || "", discord, amount, message },
       mode: "payment",
       success_url: "https://honeypixelmc.com/donate.html?success=true",
-      cancel_url: "https://honeypixelmc.com/donate?canceled=true",
+      cancel_url: "https://honeypixelmc.com/donate.html?canceled=true",
     });
 
-    const donationId = Date.now().toString();
-    await db.ref(`donations/${uid}/${donationId}`).set({
-      discord, amount, message, email, confirmed: false, via: "stripe", timestamp: Date.now(),
-    });
+    if (uid) {
+      const donationId = Date.now().toString();
+      await db.ref(`donations/${uid}/${donationId}`).set({
+        discord, amount, message, email, confirmed: false, via: "stripe", timestamp: Date.now(),
+      });
+    }
 
-    await sendWebhook("💚 Stripe Donation Started", `**User:** \`${discord}\`\n**Amount:** $${amount}\n**Email:** ${email}`);
+    await sendWebhook("💚 Stripe Donation Started", `**User:** \`${discord}\`\n**Amount:** $${amount}${email ? `\n**Email:** ${email}` : ""}`);
     res.json({ url: session.url });
   } catch (err) {
-    console.error("❌ Stripe/token error:", err);
-    res.status(403).json({ error: "Invalid or expired token" });
+    console.error("❌ Stripe session error:", err);
+    res.status(500).json({ error: "Stripe session creation failed" });
   }
 });
 
-// 🅿️ PayPal Webhook
+// PayPal Webhook
 app.post("/paypal-webhook", async (req, res) => {
   const event = req.body;
 
@@ -200,7 +213,7 @@ app.post("/paypal-webhook", async (req, res) => {
   res.sendStatus(200);
 });
 
-// 🚀 Start Server
+// Start the server
 app.listen(PORT, () => {
   console.log(`✅ Server running at https://honeypixelmc.com on port ${PORT}`);
 });
