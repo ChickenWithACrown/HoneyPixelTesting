@@ -169,29 +169,53 @@
       console.error(err);
     }
   });
-    document.addEventListener("DOMContentLoaded", () => {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get("success") === "true") {
-        const discord = prompt("🎉 Thanks for donating! Enter your Discord username:");
-        const message = prompt("Add a message? (optional)") || "";
-    
-        if (discord) {
-          fetch("/donation-initiate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              discord,
-              amount: "0", // Replace or calculate if you track it
-              message
-            })
-          }).then(() => {
-            alert("✅ Discord info saved!");
-          }).catch(() => {
-            alert("⚠️ Could not save your info. Please contact support.");
-          });
-        }
+ document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+
+    // 🔁 Only ask after successful payment redirect
+    if (params.get("success") === "true") {
+      const discord = prompt("🎉 Thanks for donating! Please enter your Discord username:");
+      const message = prompt("Leave a message? (optional)") || "";
+
+      if (discord) {
+        fetch("/donation-initiate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            discord,
+            amount: "0", // amount is tracked by server via webhook
+            message
+          })
+        })
+        .then(() => alert("✅ Info saved! You rock."))
+        .catch(() => alert("⚠️ Payment received, but we couldn’t log your username. Please contact support."));
       }
+    }
+  });
+
+  // Optional: Stripe checkout session from another flow
+  document.getElementById("stripe-donate-btn")?.addEventListener("click", async () => {
+    const amount = prompt("How much would you like to donate? (USD)");
+    if (!amount || isNaN(amount) || amount <= 0) return alert("Please enter a valid amount.");
+
+    let idToken = null;
+    try {
+      const user = firebase?.auth()?.currentUser;
+      if (user) idToken = await user.getIdToken();
+    } catch {}
+
+    const res = await fetch("/create-stripe-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount, discord: "temp", message: "via stripe", idToken })
     });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("Something went wrong. Try again later.");
+    }
+  });
   </script>
 </body>
 </html>
