@@ -58,8 +58,14 @@
     <p>Or enter a custom amount:</p>
     <input type="number" id="customAmount" placeholder="USD" min="1" />
 
+     <!-- Stripe Donate Button -->
+<div style="margin-top: 1.5rem;">
+  <button id="stripe-donate-btn" class="preset" style="background: #6366f1;">Donate with Stripe</button>
+</div>
+
     <div id="paypal-button-container"></div>
   </div>
+
 
   <script>
     let amount = 5; // default
@@ -190,30 +196,6 @@
         .then(() => alert("✅ Info saved! You rock."))
         .catch(() => alert("⚠️ Payment received, but we couldn’t log your username. Please contact support."));
       }
-    }
-  });
-
-  // Optional: Stripe checkout session from another flow
-  document.getElementById("stripe-donate-btn")?.addEventListener("click", async () => {
-    const amount = prompt("How much would you like to donate? (USD)");
-    if (!amount || isNaN(amount) || amount <= 0) return alert("Please enter a valid amount.");
-
-    let idToken = null;
-    try {
-      const user = firebase?.auth()?.currentUser;
-      if (user) idToken = await user.getIdToken();
-    } catch {}
-
-    const res = await fetch("/create-stripe-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount, discord: "temp", message: "via stripe", idToken })
-    });
-    const data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      alert("Something went wrong. Try again later.");
     }
   });
   </script>
