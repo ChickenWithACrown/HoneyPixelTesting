@@ -774,13 +774,6 @@
             logoutBtn.onclick = () => {
                 auth.signOut();
             };
-            //Donation Pre Action
-            async function initiateDonation() {
-                const user = auth.currentUser;
-                if (!user) {
-                    showToast("🔒 You must be logged in to donate.");
-                    return;
-                }
             
                 const discord = prompt("Enter your Discord tag (e.g. User#1234):");
                 const amount = prompt("Enter donation amount ($USD):");
@@ -791,6 +784,14 @@
                     return;
                 }
             
+                const user = auth.currentUser;
+                if (!user) {
+                    showToast("🔒 You must be logged in to donate.");
+                    return;
+                }
+                
+                const idToken = await user.getIdToken(); // 🔐 get secure Firebase token
+                
                 const res = await fetch("/donation-initiate", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -798,8 +799,19 @@
                         discord,
                         amount,
                         message,
-                        uid: user.uid,
-                        email: user.email
+                        idToken // ✅ use this instead of uid/email directly
+                    })
+                });
+
+                const idToken = await user.getIdToken();
+                const res = await fetch("/create-stripe-session", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        amount,
+                        discord,
+                        message,
+                        idToken
                     })
                 });
             
