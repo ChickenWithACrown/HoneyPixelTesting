@@ -179,29 +179,6 @@
       console.error(err);
     }
   });
-
-  // Handle redirect after successful Stripe payment
-  document.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("success") === "true") {
-      const discord = prompt("🎉 Thanks for donating! Please enter your Discord username:");
-      const message = prompt("Leave a message? (optional)") || "";
-
-      if (discord) {
-        fetch("/donation-initiate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            discord,
-            amount: "0", // Final amount is confirmed via webhook
-            message
-          })
-        })
-        .then(() => alert("✅ Info saved! You rock."))
-        .catch(() => alert("⚠️ Payment received, but we couldn’t log your username. Please contact support."));
-      }
-    }
-  });
   </script>
 </body>
 </html>
