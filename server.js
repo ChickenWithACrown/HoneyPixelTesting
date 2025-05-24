@@ -1,15 +1,13 @@
 const express = require("express");
-const path = require("path");
 const fetch = require("node-fetch");
+const path = require("path");
+const stripe = require("stripe")("sk_test_Your_Secret_Key_Here"); // 🟩 Replace with your real Stripe secret key
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-require("dotenv").config(); // optional .env
+const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4"; // ✅ your Discord webhook
 
-const webhookURL = process.env.WEBHOOK_URL || "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4";
-
-// In-memory donation store
-const donations = {};
+const donations = {}; // memory-based log
 
 app.use(express.json());
 app.use("/image", express.static(path.join(__dirname, "image")));
@@ -19,12 +17,16 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// 🆕 Send webhook
+// 🔗 Shared embed sender
 function sendWebhook(title, description, color = 0x00ffcc) {
   const embed = {
-    embeds: [{ title, description, color, timestamp: new Date().toISOString() }],
+    embeds: [{
+      title,
+      description,
+      color,
+      timestamp: new Date().toISOString(),
+    }],
   };
-
   return fetch(webhookURL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -32,21 +34,21 @@ function sendWebhook(title, description, color = 0x00ffcc) {
   });
 }
 
-// 📥 New donation started
+// 📥 Donation Start (requires auth)
 app.post("/donation-initiate", (req, res) => {
-  const { discord, amount, message = "" } = req.body;
+  const { discord, amount, message = "", uid, email } = req.body;
 
-  if (!discord || !amount) {
-    return res.status(400).json({ error: "Missing discord or amount" });
+  if (!discord || !amount || !uid || !email) {
+    return res.status(400).json({ error: "Missing required fields." });
   }
 
   const id = Date.now().toString();
-  donations[id] = { discord, amount, message, timestamp: Date.now(), confirmed: false };
+  donations[id] = { discord, amount, message, uid, email, timestamp: Date.now(), confirmed: false };
 
-  const description = `**User:** \`${discord}\`\n**Amount:** $${amount}\n${message ? `**Note:** ${message}` : ""}`;
-  sendWebhook("💚 New Donation", description)
+  const desc = `**User:** \`${discord}\`\n**Amount:** $${amount}\n**Email:** ${email}${message ? `\n**Note:** ${message}` : ""}`;
+  sendWebhook("💚 New Donation Started", desc)
     .then(() => {
-      console.log(`✅ Donation started: ${discord} ($${amount})`);
+      console.log(`✅ Donation started by ${email} ($${amount})`);
       res.json({ success: true, id });
     })
     .catch((err) => {
@@ -55,14 +57,7 @@ app.post("/donation-initiate", (req, res) => {
     });
 });
 
-// ✅ Check donation confirmation status
-app.get("/donation-status/:id", (req, res) => {
-  const donation = donations[req.params.id];
-  if (!donation) return res.status(404).json({ error: "Not found" });
-  res.json({ confirmed: donation.confirmed });
-});
-
-// 🧾 PayPal webhook
+// 🧾 PayPal Confirmation
 app.post("/paypal-webhook", (req, res) => {
   const event = req.body;
 
@@ -74,20 +69,62 @@ app.post("/paypal-webhook", (req, res) => {
       .find(([, d]) => d.amount === amount && !d.confirmed);
 
     const discord = matchEntry ? matchEntry[1].discord : "Unknown";
-    if (matchEntry) donations[matchEntry[0]].confirmed = true;
+    const email = matchEntry ? matchEntry[1].email : "Unknown";
 
-    const description = `**User:** \`${discord}\`\n**Amount:** $${amount}`;
-    sendWebhook("✅ Donation Confirmed via PayPal", description).catch(console.error);
+    if (matchEntry) matchEntry[1].confirmed = true;
 
-    console.log(`💸 Confirmed donation of $${amount} from ${discord}`);
+    const desc = `**User:** \`${discord}\`\n**Amount:** $${amount}\n**Email:** ${email}`;
+    sendWebhook("✅ PayPal Donation Confirmed", desc).catch(console.error);
+    console.log(`💸 PayPal confirmed: $${amount} from ${discord}`);
   } else {
-    console.log("📥 Other PayPal event received:", event.event_type);
+    console.log("📥 Other PayPal event:", event.event_type);
   }
 
   res.sendStatus(200);
 });
 
-// 🟢 Start
+// 🧾 Stripe Session Creation
+app.post("/create-stripe-session", async (req, res) => {
+  const { amount, uid, email, discord, message } = req.body;
+
+  if (!amount || !uid || !email || !discord) {
+    return res.status(400).json({ error: "Missing Stripe donation info" });
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [{
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: `HoneyPixel Donation (${discord})`,
+            description: message || "Thanks for your support!",
+          },
+          unit_amount: Math.round(parseFloat(amount) * 100),
+        },
+        quantity: 1,
+      }],
+      metadata: { uid, email, discord, amount, message },
+      mode: "payment",
+      success_url: "https://honeypixelmc.com/donate-success",
+      cancel_url: "https://honeypixelmc.com/donate-cancel",
+    });
+
+    const id = Date.now().toString();
+    donations[id] = { uid, email, discord, amount, message, timestamp: Date.now(), confirmed: false };
+
+    const desc = `**User:** \`${discord}\`\n**Amount:** $${amount}\n**Email:** ${email}${message ? `\n**Note:** ${message}` : ""}`;
+    sendWebhook("💚 Stripe Donation Started", desc).catch(console.error);
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error("❌ Stripe error:", err);
+    res.status(500).json({ error: "Stripe failed" });
+  }
+});
+
+// 🟢 Server start
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
