@@ -223,32 +223,41 @@
   color: #fff;
   border-color: #000;
 }
-.bg-surface {
-    background: url('https://i.imgur.com/wP3X4IE.png') no-repeat center center;
-    background-size: cover;
-    background-attachment: fixed;
-}
-.bg-dirt {
-    background: url('https://i.imgur.com/pT5ctWN.png') repeat;
-    background-size: cover;
-    background-attachment: fixed;
-}
-.bg-stone {
-    background: url('https://i.imgur.com/NphQSkY.png') repeat;
-    background-size: cover;
-    background-attachment: fixed;
-}
-.bg-cave {
-    background: url('https://i.imgur.com/W9yAXkT.png') repeat;
-    background-size: cover;
-    background-attachment: fixed;
-}
-.bg-lava {
-    background: url('https://i.imgur.com/bCRUP7C.png') repeat;
-    background-size: cover;
-    background-attachment: fixed;
+/* Base styles */
+:root {
+  --bg-color: #f5f5f5; /* light default */
+  --text-color: #111;
 }
 
+[data-theme="light"] body {
+  background-image: url('surface-light.png');
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+[data-theme="dark"] body {
+  background-image: url('cave-dark.png');
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+
+/* Apply background and text globally */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Optional: style modals/forms/containers */
+.modal-content,
+#auth-modal,
+form,
+.section-box {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid #ccc;
+}
 
 </style>
 
