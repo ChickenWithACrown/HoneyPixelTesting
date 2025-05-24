@@ -1,12 +1,11 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const path = require("path");
-const stripe = require("stripe")("sk_test_Your_Secret_Key_Here"); // 🟩 Replace with your real Stripe secret key
+const stripe = require("stripe")("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");
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4"; // ✅ your Discord webhook
-
+const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4"; 
 const donations = {}; // memory-based log
 
 app.use(express.json());
