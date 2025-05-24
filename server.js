@@ -8,7 +8,7 @@ const serviceAccount = require("./Key.json");
 const app = express();
 const PORT = process.env.PORT || 10000;
 const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4";
-event = stripe.webhooks.constructEvent(req.body, sig, "whsec_OxU91TwSj9f3DA71o9AHkXS2onFzd1Id");
+const stripeWebhookSecret = "whsec_OxU91TwSj9f3DA71o9AHkXS2onFzd1Id";
 
 // In-memory fallback
 const inMemoryDonations = {};
@@ -20,10 +20,9 @@ admin.initializeApp({
 });
 const db = admin.database();
 
+// ✅ Stripe Webhook Handler (MUST BE ABOVE express.json)
 app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (req, res) => {
   const sig = req.headers["stripe-signature"];
-  const stripeWebhookSecret = "whsec_OxU91TwSj9f3DA71o9AHkXS2onFzd1Id";
-
   let event;
 
   try {
@@ -32,7 +31,7 @@ app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (re
     console.error("⚠️ Stripe signature verification failed:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
-  // ✅ Handle the event
+
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const { uid, email, discord, amount } = session.metadata || {};
@@ -59,13 +58,8 @@ app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (re
 
   res.sendStatus(200);
 });
-    }
-  }
 
-  res.sendStatus(200);
-});
-
-// ✅ Must come after raw body parser
+// ✅ Must come after express.raw
 app.use(express.json());
 app.use("/image", express.static(path.join(__dirname, "image")));
 app.use(express.static(path.join(__dirname, "public")));
