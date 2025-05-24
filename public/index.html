@@ -314,40 +314,45 @@ header {
 
 </head>
 <body class="bg-green-100 text-gray-900 font-mono creeper-bg">
-    <!-- Header -->
-    <header class="minecraft-inventory p-4 sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 gold-block rounded flex items-center justify-center">
-                    <span class="text-2xl">🐝</span>
-                </div>
-                <h1 class="minecraft-font text-2xl text-amber-900">HoneyPixelMC</h1>
-            </div>
-                <!-- Toggle for mobile menu -->
-                <button onclick="toggleTheme()" class="btn-minecraft">🌓 Toggle Theme</button>
-                <button class="nav-toggle" onclick="toggleNav()">☰</button>
-            <!-- Nav Menu -->
-            <nav id="navMenu" class="hidden md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-1 mt-4 md:mt-0">
-             <a href="#home" class="btn-minecraft px-4 py-2 minecraft-font text-xs">HOME</a>
-            <a href="#features" class="btn-minecraft px-4 py-2 minecraft-font text-xs">FEATURES</a>
-            <a href="#events" class="btn-minecraft px-4 py-2 minecraft-font text-xs">EVENTS</a>
-           <a href="/donate.html" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DONATE</a>
-            </nav>
+   <!-- Header -->
+<header class="minecraft-inventory p-4 sticky top-0 z-50 bg-white dark:bg-black shadow-md">
+  <div class="container mx-auto flex items-center justify-between flex-wrap">
 
-            <a href="https://discord.gg/YU25e7Mn9b" class="btn-minecraft px-4 py-2 minecraft-font text-xs">
-                JOIN DISCORD
-            </a>
-            <!-- Auth UI -->
-            <div id="auth-section" class="ml-4 flex items-center space-x-2">
-                <button id="login-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs">LOGIN</button>
-                <span id="user-info" class="minecraft-font text-xs text-amber-900 hidden"></span>
-                <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden">LOGOUT</button>
-                <button id="theme-toggle">🌙 Dark Mode</button>
-                <button onclick="visitShop()">🛍️ Visit Shop</button>
-            </div>
-        </div>
-       
-    </header>
+    <!-- Logo & Title -->
+    <div class="flex items-center space-x-3">
+      <div class="w-12 h-12 gold-block rounded flex items-center justify-center">
+        <span class="text-2xl">🐝</span>
+      </div>
+      <h1 class="minecraft-font text-2xl text-amber-900">HoneyPixelMC</h1>
+    </div>
+
+    <!-- Mobile Toggle -->
+    <button class="md:hidden btn-minecraft ml-auto mt-3" onclick="toggleNav()">☰</button>
+
+    <!-- Navigation + Auth Section -->
+    <div id="navMenu" class="w-full md:w-auto hidden md:flex md:items-center md:space-x-3 mt-4 md:mt-0 flex-col md:flex-row space-y-2 md:space-y-0">
+
+      <!-- Main Nav Links -->
+      <nav class="flex flex-col md:flex-row items-center md:space-x-3 space-y-2 md:space-y-0">
+        <a href="#home" class="btn-minecraft px-4 py-2 minecraft-font text-xs">HOME</a>
+        <a href="#features" class="btn-minecraft px-4 py-2 minecraft-font text-xs">FEATURES</a>
+        <a href="#events" class="btn-minecraft px-4 py-2 minecraft-font text-xs">EVENTS</a>
+        <a href="/donate.html" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DONATE</a>
+        <a href="https://discord.gg/YU25e7Mn9b" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DISCORD</a>
+      </nav>
+
+      <!-- Utility Buttons -->
+      <div id="auth-section" class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2 mt-2 md:mt-0">
+        <button id="login-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs">LOGIN</button>
+        <span id="user-info" class="minecraft-font text-xs text-amber-900 hidden"></span>
+        <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden">LOGOUT</button>
+        <button id="theme-toggle" class="btn-minecraft px-4 py-2 minecraft-font text-xs">🌙 Dark Mode</button>
+        <button onclick="visitShop()" class="btn-minecraft px-4 py-2 minecraft-font text-xs">🛍️ SHOP</button>
+      </div>
+    </div>
+  </div>
+</header>
+
 
         <section id="dev" class="hidden tab-content py-16 px-6 text-center">
           <div class="container mx-auto">
