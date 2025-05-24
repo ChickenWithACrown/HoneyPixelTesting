@@ -1,7 +1,7 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const path = require("path");
-const stripe = require("stripe")("sk_test_YourStripeSecretKeyHere"); // ⬅️ replace with your key
+const stripe = require("stripe")("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");
 const admin = require("firebase-admin");
 const serviceAccount = require("./firebase-service.json"); // your Firebase Admin SDK JSON
 
