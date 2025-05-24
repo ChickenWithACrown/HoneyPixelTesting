@@ -256,7 +256,7 @@
                 <span id="user-info" class="minecraft-font text-xs text-amber-900 hidden"></span>
                 <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden">LOGOUT</button>
                 <button id="theme-toggle">🌙 Dark Mode</button>
-                <button onclick="window.open('https://store.honeypixelmc.com', '_blank')">🛍️ Visit Shop</button>
+                <button onclick="visitShop()">🛍️ Visit Shop</button>
             </div>
         </div>
        
@@ -1021,6 +1021,15 @@
                     const menu = document.getElementById('navMenu');
                     menu.classList.toggle('hidden');
                     };
+            
+                function visitShop() {
+                const user = auth.currentUser;
+                if (!user) {
+                    showToast("🔒 You must be logged in to visit the shop.");
+                    return;
+                }
+                window.open("https://store.honeypixelmc.com", "_blank");
+            }
                 });
             });
         
