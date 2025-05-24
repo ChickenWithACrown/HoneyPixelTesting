@@ -263,91 +263,353 @@ form,
 
 </head>
 <body class="bg-green-100 text-gray-900 font-mono creeper-bg">
+    <!-- Header -->
+    <header class="minecraft-inventory p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 gold-block rounded flex items-center justify-center">
+                    <span class="text-2xl">🐝</span>
+                </div>
+                <h1 class="minecraft-font text-2xl text-amber-900">HoneyPixelMC</h1>
+            </div>
+                <!-- Toggle for mobile menu -->
+                    <button id="mobileMenuToggle" class="md:hidden btn-minecraft px-3 py-2 minecraft-font text-xs">☰ MENU</button>
+                <!-- Nav Menu -->
+            <nav id="navMenu" class="hidden md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-1 mt-4 md:mt-0">
+             <a href="#home" class="btn-minecraft px-4 py-2 minecraft-font text-xs">HOME</a>
+            <a href="#features" class="btn-minecraft px-4 py-2 minecraft-font text-xs">FEATURES</a>
+            <a href="#events" class="btn-minecraft px-4 py-2 minecraft-font text-xs">EVENTS</a>
+            <a href="#donate" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DONATE</a>
+            </nav>
 
-  <!-- ========================= -->
-  <!-- 🧱 Sticky Header -->
-  <!-- ========================= -->
-  <header class="minecraft-inventory p-4 sticky top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center">
-
-      <!-- Logo + Title -->
-      <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 gold-block rounded flex items-center justify-center">
-          <span class="text-2xl">🐝</span>
+            <a href="https://discord.gg/YU25e7Mn9b" class="btn-minecraft px-4 py-2 minecraft-font text-xs">
+                JOIN DISCORD
+            </a>
+            <!-- Auth UI -->
+            <div id="auth-section" class="ml-4 flex items-center space-x-2">
+                <button id="login-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs">LOGIN</button>
+                <span id="user-info" class="minecraft-font text-xs text-amber-900 hidden"></span>
+                <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden">LOGOUT</button>
+                <button id="theme-toggle">🌙 Dark Mode</button>
+                <button onclick="visitShop()">🛍️ Visit Shop</button>
+            </div>
         </div>
-        <h1 class="minecraft-font text-2xl text-amber-900">HoneyPixelMC</h1>
-      </div>
+       
+    </header>
 
-      <!-- Mobile Menu Toggle -->
-      <button id="mobileMenuToggle" class="md:hidden btn-minecraft px-3 py-2 minecraft-font text-xs">☰ MENU</button>
+        <section id="dev" class="hidden tab-content py-16 px-6 text-center">
+          <div class="container mx-auto">
+            <h2 class="minecraft-font text-3xl mb-6 text-green-700">🛠️ Developer Tools</h2>
+            <p class="font-mono text-gray-800">Manage users and view payments below:</p>
+        
+            <!-- User List -->
+            <div id="user-list" class="mt-6 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
+              <p class="text-amber-800 minecraft-font mb-2">🔐 User Accounts:</p>
+              <div id="user-list-container">Loading users...</div>
+            </div>
+        
+            <!-- Payment History -->
+            <div id="payment-history" class="mt-10 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
+              <p class="text-amber-800 minecraft-font mb-2">💰 Payment Records:</p>
+              <div id="payment-container">Select a user to view donations.</div>
+            </div>
+          </div>
+        </section>
 
-      <!-- Desktop Nav Menu -->
-      <nav id="navMenu" class="hidden md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-1 mt-4 md:mt-0">
-        <a href="#home" class="btn-minecraft px-4 py-2 minecraft-font text-xs">HOME</a>
-        <a href="#features" class="btn-minecraft px-4 py-2 minecraft-font text-xs">FEATURES</a>
-        <a href="#events" class="btn-minecraft px-4 py-2 minecraft-font text-xs">EVENTS</a>
-        <a href="#donate" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DONATE</a>
-      </nav>
-
-      <!-- Auth / Shop / Discord -->
-      <div id="auth-section" class="ml-4 flex items-center space-x-2">
-        <button id="login-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs">LOGIN</button>
-        <span id="user-info" class="minecraft-font text-xs text-amber-900 hidden"></span>
-        <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden">LOGOUT</button>
-        <button id="theme-toggle">🌙 Dark Mode</button>
-        <button onclick="visitShop()">🛍️ Visit Shop</button>
-        <a href="https://discord.gg/YU25e7Mn9b" class="btn-minecraft px-4 py-2 minecraft-font text-xs">JOIN DISCORD</a>
-      </div>
+    <!-- Login/Signup Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden">
+        <div class="minecraft-inventory rounded-lg p-8 bg-white relative w-full max-w-xs">
+            <button id="close-auth-modal" class="absolute top-2 right-2 text-xl font-bold">&times;</button>
+            <h2 class="minecraft-font text-lg mb-4 text-center" id="auth-modal-title">Login</h2>
+            <form id="auth-form" class="space-y-3">
+                <input id="auth-email" type="email" required placeholder="Email" class="w-full p-2 border rounded minecraft-font text-xs" />
+                <input id="auth-password" type="password" required placeholder="Password" class="w-full p-2 border rounded minecraft-font text-xs" />
+                <button type="submit" class="btn-minecraft w-full py-2 minecraft-font text-xs" id="auth-submit-btn">Login</button>
+            </form>
+            <div class="text-center mt-3">
+                <button id="toggle-auth-mode" class="minecraft-font text-xs text-blue-700 underline bg-transparent border-0">Need an account? Sign up</button>
+            </div>
+            <div class="text-center mt-3">
+                <button id="google-auth-btn" class="btn-minecraft w-full py-2 minecraft-font text-xs">Sign in with Google</button>
+            </div>
+            <div id="auth-error" class="text-xs text-red-600 mt-2 text-center"></div>
+        </div>
     </div>
-  </header>
 
-  <!-- ========================= -->
-  <!-- 🛠️ Developer Tools Section -->
-  <!-- ========================= -->
-  <section id="dev" class="hidden tab-content py-16 px-6 text-center">
-    <div class="container mx-auto">
-      <h2 class="minecraft-font text-3xl mb-6 text-green-700">🛠️ Developer Tools</h2>
-      <p class="font-mono text-gray-800">Manage users and view payments below:</p>
+    <!-- Hero Section -->
+    <section id="home" class="text-center py-16 px-4">
+        <div class="container mx-auto">
+            <div class="mb-8">
+                <div class="w-32 h-32 mx-auto minecraft-block rounded-lg flex items-center justify-center mb-6 pixelated">
+                    <span class="text-6xl">🍯</span>
+                </div>
+            </div>
+            <div class="text-center mt-10 mb-8">
+                <img src="/image/Title.png" alt="Honey Lifesteal Logo" class="logo pixelated" />
+            </div>
 
-      <!-- User List -->
-      <div id="user-list" class="mt-6 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
-        <p class="text-amber-800 minecraft-font mb-2">🔐 User Accounts:</p>
-        <div id="user-list-container">Loading users...</div>
-      </div>
+            <p class="text-lg mb-8 max-w-2xl mx-auto text-gray-700 font-mono">
+                &gt; A cozy Minecraft server where community comes first<br />
+                &gt; Build, explore, and make friends in our blocky world<br />
+                &gt; Survival • Economy • Events • Community
+            </p>
+            <div class="minecraft-inventory rounded-lg p-6 inline-block mb-8">
+                <div class="minecraft-font text-lg text-green-800 mb-3">SERVER INFO</div>
+                <div class="text-2xl font-mono font-bold text-amber-700 mb-2">
+                    play.honeypixelmc.com
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>VERSION: <span id="serverVersion">Loading...</span></div>
+                    <div>TYPE: <span id="serverType">Loading...</span></div>
+                    <div>PLAYERS: <span id="playerCount">Loading...</span>/<span id="maxPlayers">Loading...</span></div>
+                    <div>STATUS: <span id="onlineStatus">Loading...</span></div>
+                </div>
+            </div>
+            <div class="flex justify-center space-x-4 mt-8">
+                <button onclick="copyServerIP()" class="btn-minecraft px-8 py-4 minecraft-font text-sm">
+                    START PLAYING
+                </button>
+                <button onclick="openRulesModal()" class="stone-block text-white px-8 py-4 minecraft-font text-sm">
+                    SERVER RULES
+                </button>
+            </div>
+        </div>
+    </section>
 
-      <!-- Payment History -->
-      <div id="payment-history" class="mt-10 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
-        <p class="text-amber-800 minecraft-font mb-2">💰 Payment Records:</p>
-        <div id="payment-container">Select a user to view donations.</div>
-      </div>
+    <!-- Help Section -->
+    <section class="creeper-bg py-16 px-6 text-center">
+        <div class="container mx-auto">
+            <h3 class="minecraft-font text-3xl mb-6 text-amber-800">NEED HELP? 🆘</h3>
+            <p class="text-base mb-10 text-gray-800 font-mono max-w-xl mx-auto">
+                &gt; Join our Discord for support<br />
+                &gt; Read our beginner-friendly guides<br />
+                &gt; Ask staff members in-game or in the forums
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="https://discord.gg/YU25e7Mn9b" target="_blank" class="btn-minecraft px-8 py-3 minecraft-font text-sm">
+                    🗨️ JOIN DISCORD
+                </a>
+                <button onclick="openGuideModal()" class="btn-minecraft px-8 py-3 minecraft-font text-sm">
+                    📘 READ GUIDES
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules Modal -->
+    <div id="rules-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+        <div class="minecraft-inventory p-6 rounded-lg bg-white w-full max-w-md relative">
+            <button onclick="closeRulesModal()" class="absolute top-2 right-3 text-xl font-bold text-gray-800">&times;</button>
+            <h2 class="minecraft-font text-xl text-green-800 mb-4">SERVER RULES 📜</h2>
+            <ul class="text-sm text-gray-800 font-mono space-y-2 text-left">
+                <li>&gt; Be respectful to all players</li>
+                <li>&gt; No hacking, cheating, or exploits</li>
+                <li>&gt; No griefing or stealing</li>
+                <li>&gt; Keep chat friendly & safe</li>
+                <li>&gt; Have fun and help others!</li>
+            </ul>
+            <div class="text-center mt-6">
+                <button onclick="closeRulesModal()" class="btn-minecraft px-6 py-2 minecraft-font text-xs">
+                    CLOSE
+                </button>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- ========================= -->
-  <!-- 🔐 Login/Signup Modal -->
-  <!-- ========================= -->
-  <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden">
-    <div class="minecraft-inventory rounded-lg p-8 bg-white relative w-full max-w-xs">
-      <button id="close-auth-modal" class="absolute top-2 right-2 text-xl font-bold">&times;</button>
-      <h2 class="minecraft-font text-lg mb-4 text-center" id="auth-modal-title">Login</h2>
-      <form id="auth-form" class="space-y-3">
-        <input id="auth-email" type="email" required placeholder="Email" class="w-full p-2 border rounded minecraft-font text-xs" />
-        <input id="auth-password" type="password" required placeholder="Password" class="w-full p-2 border rounded minecraft-font text-xs" />
-        <button type="submit" class="btn-minecraft w-full py-2 minecraft-font text-xs" id="auth-submit-btn">Login</button>
-      </form>
-      <div class="text-center mt-3">
-        <button id="toggle-auth-mode" class="minecraft-font text-xs text-blue-700 underline bg-transparent border-0">Need an account? Sign up</button>
+    <!-- Guide Modal -->
+    <div id="guide-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+        <div class="relative w-full max-w-md minecraft-inventory p-6 bg-yellow-50 rounded-lg border-4 border-amber-600 shadow-lg overflow-hidden">
+
+            <!-- Honey Drip Animation -->
+            <div class="absolute top-0 left-0 w-full h-4 overflow-hidden z-10">
+                <div class="drip-strip flex animate-drip">
+                    <div class="honey-drop"></div>
+                    <div class="honey-drop delay-100"></div>
+                    <div class="honey-drop delay-200"></div>
+                    <div class="honey-drop delay-300"></div>
+                    <div class="honey-drop delay-400"></div>
+                </div>
+            </div>
+
+            <!-- Close Button -->
+            <button onclick="closeGuideModal()" class="absolute top-2 right-3 text-xl font-bold text-amber-800 z-20">&times;</button>
+
+            <!-- Guide Menu -->
+            <div id="guide-menu" class="z-20 relative">
+                <h2 class="minecraft-font text-xl text-amber-800 mb-4 mt-2">BEGINNER GUIDES 📘</h2>
+                <ul class="text-sm text-gray-800 font-mono text-left space-y-3">
+                    <li><button class="text-left w-full" onclick="openGuidePage('join')">&gt; How to join the server</button></li>
+                    <li><button class="text-left w-full" onclick="openGuidePage('claim')">&gt; How to claim land and protect builds</button></li>
+                    <li><button class="text-left w-full" onclick="openGuidePage('coins')">&gt; Earning coins & using shops</button></li>
+                    <li><button class="text-left w-full" onclick="openGuidePage('rules')">&gt; Community rules and etiquette</button></li>
+                </ul>
+            </div>
+
+            <!-- Guide Page Viewer -->
+            <div id="guide-page" class="hidden z-20 relative">
+                <h2 id="guide-title" class="minecraft-font text-xl text-amber-800 mb-3">Title</h2>
+                <div id="guide-content" class="text-sm text-gray-800 font-mono text-left space-y-2 mb-4">
+                    Content
+                </div>
+                <div class="text-center">
+                    <button onclick="backToGuideMenu()" class="btn-minecraft px-6 py-2 minecraft-font text-xs">
+                        ← BACK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 px-4">
+        <div class="container mx-auto">
+            <h2 class="minecraft-font text-3xl text-center mb-12 text-amber-800">GAME FEATURES</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grass-block rounded-lg p-6 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 stone-block rounded flex items-center justify-center">
+                        <span class="text-2xl">🏰</span>
+                    </div>
+                    <h3 class="minecraft-font text-sm text-white mb-3">SURVIVAL MODE</h3>
+                    <p class="text-xs text-white">Build, mine, craft and survive with friends in our enhanced survival world</p>
+                </div>
+                <div class="gold-block rounded-lg p-6 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 minecraft-block rounded flex items-center justify-center">
+                        <span class="text-2xl">💰</span>
+                    </div>
+                    <h3 class="minecraft-font text-sm text-white mb-3">ECONOMY</h3>
+                    <p class="text-xs text-white">Trade items, run shops, and build your wealth in our player economy</p>
+                </div>
+                <div class="diamond-block rounded-lg p-6 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 stone-block rounded flex items-center justify-center">
+                        <span class="text-2xl">🎮</span>
+                    </div>
+                    <h3 class="minecraft-font text-sm text-white mb-3">MINIGAMES</h3>
+                    <p class="text-xs text-white">PvP arenas, parkour, build competitions and more fun activities</p>
+                </div>
+                <div class="emerald-block rounded-lg p-6 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 minecraft-block rounded flex items-center justify-center">
+                        <span class="text-2xl">👥</span>
+                    </div>
+                    <h3 class="minecraft-font text-sm text-white mb-3">COMMUNITY</h3>
+                    <p class="text-xs text-white">Join a friendly community that helps each other and builds together</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="py-20 px-4 creeper-bg">
+        <div class="container mx-auto text-center">
+            <h2 class="minecraft-font text-4xl mb-12 text-amber-800">UPCOMING EVENTS</h2>
+
+            <div class="minecraft-inventory rounded-lg mx-auto p-8 max-w-lg bg-white bg-opacity-90 shadow-lg">
+                <div class="text-4xl text-green-700 minecraft-font mb-4">COMING SOON</div>
+                <p class="text-sm text-gray-800 font-mono">
+                    🏆 Check back soon for epic events, build battles, minigames and more! 🧱
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Section -->
+    <section id="donate" class="py-16 px-4 creeper-bg">
+        <div class="container mx-auto text-center">
+            <h2 class="minecraft-font text-3xl mb-6 text-green-800">SUPPORT THE SERVER</h2>
+            <p class="text-lg mb-10 max-w-xl mx-auto text-gray-700 font-mono">
+                &gt; Help us keep HoneyPixelMC alive and thriving.<br />
+                &gt; Every dollar supports server costs, events, and future features.<br />
+                &gt; No pay-to-win, just pure love for the community! 🐝💚
+            </p>
+            <button class="btn-minecraft px-8 py-3 minecraft-font text-lg"
+                    onclick="initiateDonation()">
+                DONATE NOW
+            </button>
+        </div>
+    </section>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg max-w-lg w-11/12 p-6 relative">
+            <button onclick="closeModal('contactModal')" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 font-bold text-xl">&times;</button>
+            <h2 class="minecraft-font text-2xl mb-4 text-amber-900">Contact Us</h2>
+            <p class="text-gray-800 font-mono text-sm mb-4">Contact the Site Dev:</p>
+            <div class="flex justify-center space-x-6">
+                <a href="mailto:ChickenWithACrown@honeypixelmc.com" class="btn-minecraft px-6 py-3 minecraft-font text-sm bg-green-600 hover:bg-green-700 text-white rounded">
+                    Email Dev
+                </a>
+            </div>
+        </div>
+    </div>
+
+      <!-- Dev Team Section -->
+<section id="devs" class="py-16 px-4 creeper-bg">
+  <div class="container mx-auto text-center">
+    <h2 class="minecraft-font text-3xl text-amber-800 mb-8">MEET THE DEV 🛠️</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Dev Card -->
+      <div class="minecraft-inventory p-4 rounded-lg bg-white shadow-md">
+        <h3 class="minecraft-font text-xl text-amber-800 mb-2">ChickenWithACrown</h3>
+        <p class="text-sm text-gray-700 font-mono mb-2">Lead Developer</p>
+        <p class="text-xs text-gray-600 font-mono mb-3">Handles backend, server setup, and features and more</p>
+        <div class="flex justify-center space-x-4 text-sm">
+          <a href="https://www.youtube.com/@ChickenWithACrown" target="_blank" class="btn-minecraft px-4 py-1 minecraft-font text-xs">YouTube</a>
+          <a href="https://cash.app/$DanielUpperman06" target="_blank" class="stone-block px-4 py-1 text-white minecraft-font text-xs">CashApp</a>
+        </div>
       </div>
-      <div class="text-center mt-3">
-        <button id="google-auth-btn" class="btn-minecraft w-full py-2 minecraft-font text-xs">Sign in with Google</button>
-      </div>
-      <div id="auth-error" class="text-xs text-red-600 mt-2 text-center"></div>
     </div>
   </div>
+</section>
+    <!-- Server Stats -->
+    <section class="bg-stone-600 py-12 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 text-center">
 
-</body>
+                <!-- Player Count -->
+                <div class="minecraft-inventory rounded p-4">
+                    <div class="minecraft-font text-2xl text-amber-700" id="playerCount">Loading...</div>
+                    <div class="text-xs text-gray-700">ACTIVE PLAYERS</div>
+                </div>
 
+                <!-- Server MOTD (Message of the Day) -->
+                <div class="minecraft-inventory rounded p-4">
+                    <div class="minecraft-font text-2xl text-green-700" id="motd">Loading...</div>
+                    <div class="text-xs text-gray-700">MOTD</div>
+                </div>
 
+                <!-- Server Version -->
+                <div class="minecraft-inventory rounded p-4">
+                    <div class="minecraft-font text-2xl text-blue-700" id="version">Loading...</div>
+                    <div class="text-xs text-gray-700">VERSION</div>
+                </div>
+
+                <!-- Server Status -->
+                <div class="minecraft-inventory rounded p-4">
+                    <div class="minecraft-font text-2xl" id="onlineStatus">Loading...</div>
+                    <div class="text-xs text-gray-700">STATUS</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="minecraft-inventory text-center py-8">
+        <div class="container mx-auto">
+            <div class="flex justify-center items-center space-x-3 mb-4">
+                <div class="w-8 h-8 gold-block rounded flex items-center justify-center">
+                    <span class="text-sm">🐝</span>
+                </div>
+                <h3 class="minecraft-font text-lg text-amber-900">HONEYPIXELMC</h3>
+            </div>
+            <p class="text-amber-800 mb-4 font-mono text-sm">Where blocks meet honey!</p>
+            <div class="flex justify-center space-x-6 mb-4 text-xs">
+                <a href="#" onclick="openModal('contactModal'); return false;" class="text-amber-700 hover:text-amber-900">CONTACT</a>
+            </div>
+            <p class="text-xs text-amber-700 minecraft-font">
+                (C) 2025 HONEYPIXELMC
+            </p>
+        </div>
+    </footer>
 <script>
 // ========================
 // ✅ Firebase Setup
