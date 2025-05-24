@@ -68,87 +68,91 @@
 
 
   <script>
-    let amount = 5; // default
+  let amount = 5; // default amount
 
-    function selectAmount(value) {
-      document.getElementById("customAmount").value = "";
-      amount = value;
-      renderPayPalButton();
-    }
+  function selectAmount(value) {
+    document.getElementById("customAmount").value = "";
+    amount = value;
+    renderPayPalButton();
+  }
 
-    function renderPayPalButton() {
-      document.getElementById("paypal-button-container").innerHTML = "";
+  function renderPayPalButton() {
+    document.getElementById("paypal-button-container").innerHTML = "";
 
-      paypal.Buttons({
-        style: {
-          color: 'gold',
-          shape: 'pill',
-          label: 'paypal',
-        },
-        createOrder: function (data, actions) {
-          const customAmount = parseFloat(document.getElementById("customAmount").value);
-          amount = !isNaN(customAmount) && customAmount > 0 ? customAmount : amount;
+    paypal.Buttons({
+      style: {
+        color: 'gold',
+        shape: 'pill',
+        label: 'paypal',
+      },
+      createOrder: function (data, actions) {
+        const customAmount = parseFloat(document.getElementById("customAmount").value);
+        amount = !isNaN(customAmount) && customAmount > 0 ? customAmount : amount;
 
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: amount.toFixed(2)
-              }
-            }]
-          });
-        },
-        onApprove: function (data, actions) {
-          return actions.order.capture().then(function (details) {
-            const payerName = details.payer.name?.given_name || "User";
-            const username = prompt(`Thanks, ${payerName}! 🎉\nEnter your Discord username:`);
-
-            if (username) {
-              fetch("/donation-initiate", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  discord: username,
-                  amount: amount.toFixed(2),
-                  paypalOrderId: data.orderID,
-                  payerEmail: details.payer.email_address || "N/A"
-                })
-              }).then(() => {
-                alert("✅ Donation received! Thank you!");
-              }).catch(() => {
-                alert("⚠️ Donation went through, but we couldn't send the payment proof to the server. Please take a screenshot showing both the payment and the date, then create a ticket.");
-              });
-            } else {
-              alert("Donation completed, but no username was submitted.");
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: amount.toFixed(2)
             }
-          });
-        },
-        onError: function (err) {
-          console.error("PayPal Error:", err);
-          alert("Something went wrong with PayPal.");
-        }
-      }).render('#paypal-button-container');
-    }
+          }]
+        });
+      },
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (details) {
+          const payerName = details.payer.name?.given_name || "User";
+          const discord = prompt(`Thanks, ${payerName}! 🎉\nEnter your Discord username:`);
+          const message = prompt("Optional: Add a message for the team") || "";
 
-    renderPayPalButton(); // Init default
+          if (discord) {
+            fetch("/donation-initiate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                discord,
+                amount: amount.toFixed(2),
+                paypalOrderId: data.orderID,
+                payerEmail: details.payer.email_address || "N/A",
+                message
+              })
+            })
+            .then(() => {
+              alert("✅ Donation received! Thank you!");
+            })
+            .catch(() => {
+              alert("⚠️ Donation was successful but we couldn't log it. Please create a support ticket.");
+            });
+          } else {
+            alert("Donation completed, but no username was submitted.");
+          }
+        });
+      },
+      onError: function (err) {
+        console.error("PayPal Error:", err);
+        alert("Something went wrong with PayPal.");
+      }
+    }).render('#paypal-button-container');
+  }
 
-    //stripe payment
-      const stripe = Stripe("pk_live_51RSFRpKCcjnqBpWjC1HRr6dbmfEut1CsTUuyUgdSKmLGXqheIwHuXWMOwNv6IlripgV9okkjgsYyxSUryecsSvI7007oVeryUB"); // Replace with your real publishable key
+  renderPayPalButton();
+
+  // Stripe payment
+  const stripe = Stripe("pk_live_51RSFRpKCcjnqBpWjC1HRr6dbmfEut1CsTUuyUgdSKmLGXqheIwHuXWMOwNv6IlripgV9okkjgsYyxSUryecsSvI7007oVeryUB");
 
   document.getElementById("stripe-donate-btn").addEventListener("click", async () => {
     const customAmount = parseFloat(document.getElementById("customAmount").value);
     const finalAmount = !isNaN(customAmount) && customAmount > 0 ? customAmount : amount;
 
     const discord = prompt("Enter your Discord username:");
-    const message = prompt("Optional: Add a message for the team") || "";
-
     if (!discord) {
       alert("Please enter your Discord username.");
       return;
     }
 
-    // Get Firebase token if logged in
+    const message = prompt("Optional: Add a message for the team") || "";
+
+    // Get Firebase token if user is logged in
     let idToken = null;
     try {
       const user = firebase?.auth()?.currentUser;
@@ -175,10 +179,10 @@
       console.error(err);
     }
   });
- document.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams(window.location.search);
 
-    // 🔁 Only ask after successful payment redirect
+  // Handle redirect after successful Stripe payment
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
       const discord = prompt("🎉 Thanks for donating! Please enter your Discord username:");
       const message = prompt("Leave a message? (optional)") || "";
@@ -189,7 +193,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             discord,
-            amount: "0", // amount is tracked by server via webhook
+            amount: "0", // Final amount is confirmed via webhook
             message
           })
         })
