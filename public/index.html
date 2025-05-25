@@ -707,28 +707,30 @@ setInterval(updateServerInfo, 15000);
 // ========================
 // 🌙 Theme Toggle
 // ========================
-const toggleBtn = document.getElementById("theme-toggle");
-const root = document.documentElement;
-const savedTheme = localStorage.getItem("theme") || "light";
-root.setAttribute("data-theme", savedTheme);
-if (toggleBtn) toggleBtn.textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("theme-toggle");
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem("theme") || "light";
+    root.setAttribute("data-theme", savedTheme);
+    if (toggleBtn) toggleBtn.textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
 
-if (toggleBtn) {
-    toggleBtn.addEventListener("click", () => {
-        const current = root.getAttribute("data-theme");
-        const newTheme = current === "dark" ? "light" : "dark";
-        root.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-        toggleBtn.textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
-    });
-}
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+            const current = root.getAttribute("data-theme");
+            const newTheme = current === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", newTheme);
+            localStorage.setItem("theme", newTheme);
+            toggleBtn.textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+        });
+    }
+});
 
 // ========================
 // 📱 Mobile Nav Toggle
 // ========================
 function toggleNav() {
-    const nav = document.querySelector('.nav-menu');
-    if (nav) nav.classList.toggle('show');
+    const nav = document.getElementById("navMenu");
+    if (nav) nav.classList.toggle("hidden");
 }
 
 // ========================
@@ -737,19 +739,64 @@ function toggleNav() {
 function visitShop() {
     window.open("https://honeypixelmc.com/shop", "_blank");
 }
-function openGuideModal() {
-    const modal = document.getElementById("guide-modal");
-    if (modal) modal.classList.remove("hidden");
-}
-function openRulesModal() {
-    const modal = document.getElementById("rules-modal");
-    if (modal) modal.classList.remove("hidden");
-}
 function copyServerIP() {
     const ip = "play.honeypixelmc.com";
     navigator.clipboard.writeText(ip)
         .then(() => alert(`✅ Server IP copied: ${ip}`))
         .catch(() => alert("⚠️ Could not copy IP."));
+}
+function openRulesModal() {
+    document.getElementById("rules-modal")?.classList.remove("hidden");
+}
+function closeRulesModal() {
+    document.getElementById("rules-modal")?.classList.add("hidden");
+}
+function openGuideModal() {
+    document.getElementById("guide-modal")?.classList.remove("hidden");
+}
+function closeGuideModal() {
+    document.getElementById("guide-modal")?.classList.add("hidden");
+    backToGuideMenu();
+}
+function backToGuideMenu() {
+    document.getElementById("guide-page")?.classList.add("hidden");
+    document.getElementById("guide-menu")?.classList.remove("hidden");
+}
+function openGuidePage(page) {
+    const guideMenu = document.getElementById('guide-menu');
+    const guidePage = document.getElementById('guide-page');
+    const guideTitle = document.getElementById('guide-title');
+    const guideContent = document.getElementById('guide-content');
+
+    guideMenu.classList.add("hidden");
+    guidePage.classList.remove("hidden");
+
+    const guides = {
+        join: {
+            title: "How to Join",
+            content: "Launch Minecraft ➤ Add Server ➤ IP: play.honeypixelmc.com ➤ Join and play!"
+        },
+        claim: {
+            title: "How to Claim",
+            content: "Use a golden shovel ➤ Right-click two corners ➤ Land protected!"
+        },
+        coins: {
+            title: "Earning Coins",
+            content: "Complete quests ➤ Sell items ➤ Events & trading!"
+        },
+        rules: {
+            title: "Community Rules",
+            content: "Be kind ➤ No griefing ➤ Respect others ➤ No exploits!"
+        }
+    };
+
+    if (guides[page]) {
+        guideTitle.textContent = guides[page].title;
+        guideContent.innerHTML = `<p>${guides[page].content}</p>`;
+    } else {
+        guideTitle.textContent = "Guide Not Found";
+        guideContent.innerHTML = "<p>This page does not exist.</p>";
+    }
 }
 
 // ========================
@@ -759,7 +806,6 @@ const loginBtn = document.getElementById('login-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const userInfo = document.getElementById('user-info');
 const devTabs = document.getElementById('dev-tabs');
-const tabContents = document.querySelectorAll('.tab-content');
 
 const authModal = document.getElementById('auth-modal');
 const closeAuthModal = document.getElementById('close-auth-modal');
@@ -872,7 +918,6 @@ logoutBtn.onclick = () => auth.signOut();
 // 🚦 Auth State Listener
 // ========================
 auth.onAuthStateChanged(async user => {
-    console.log("Auth state changed:", user);
     const devTab = document.getElementById("dev-tab");
 
     if (user) {
@@ -880,12 +925,12 @@ auth.onAuthStateChanged(async user => {
         logoutBtn.classList.remove('hidden');
         userInfo.classList.remove('hidden');
         userInfo.innerHTML = `
-          <span id="masked-identity">[Hidden]</span>
-          <button id="toggle-identity" title="Show email" class="text-sm ml-2">👁</button>
+            <span id="masked-identity">[Hidden]</span>
+            <button id="toggle-identity" title="Show email" class="text-sm ml-2">👁</button>
         `;
         document.getElementById("toggle-identity").onclick = () => {
-          const span = document.getElementById("masked-identity");
-          span.textContent = span.textContent === "[Hidden]" ? (user.displayName || user.email) : "[Hidden]";
+            const span = document.getElementById("masked-identity");
+            span.textContent = span.textContent === "[Hidden]" ? (user.displayName || user.email) : "[Hidden]";
         };
 
         let role = "member";
@@ -904,7 +949,6 @@ auth.onAuthStateChanged(async user => {
         } else {
             if (devTab) devTab.classList.add("hidden");
         }
-
     } else {
         loginBtn.classList.remove('hidden');
         logoutBtn.classList.add('hidden');
@@ -917,49 +961,50 @@ auth.onAuthStateChanged(async user => {
 // 💸 Donation Submission
 // ========================
 document.getElementById("donation-form")?.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const discord = document.getElementById("donor-discord").value.trim();
-  const amount = document.getElementById("donor-amount").value.trim();
-  const message = document.getElementById("donor-message").value.trim();
-  const errorBox = document.getElementById("donation-error");
-  const successBox = document.getElementById("donation-success");
+    const discord = document.getElementById("donor-discord").value.trim();
+    const amount = document.getElementById("donor-amount").value.trim();
+    const message = document.getElementById("donor-message").value.trim();
+    const errorBox = document.getElementById("donation-error");
+    const successBox = document.getElementById("donation-success");
 
-  errorBox.classList.add("hidden");
-  successBox.classList.add("hidden");
+    errorBox.classList.add("hidden");
+    successBox.classList.add("hidden");
 
-  if (!discord || !amount) {
-    errorBox.textContent = "Please fill in Discord username and amount.";
-    errorBox.classList.remove("hidden");
-    return;
-  }
-
-  let idToken = null;
-  const user = firebase.auth().currentUser;
-  if (user) {
-    idToken = await user.getIdToken();
-  }
-
-  try {
-    const response = await fetch("/donation-initiate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ discord, amount, message, idToken }),
-    });
-    const result = await response.json();
-
-    if (result.success) {
-      successBox.classList.remove("hidden");
-      document.getElementById("donation-form").reset();
-    } else {
-      throw new Error(result.error || "Unknown error");
+    if (!discord || !amount) {
+        errorBox.textContent = "Please fill in Discord username and amount.";
+        errorBox.classList.remove("hidden");
+        return;
     }
-  } catch (err) {
-    errorBox.textContent = err.message;
-    errorBox.classList.remove("hidden");
-  }
+
+    let idToken = null;
+    const user = firebase.auth().currentUser;
+    if (user) {
+        idToken = await user.getIdToken();
+    }
+
+    try {
+        const response = await fetch("/donation-initiate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ discord, amount, message, idToken }),
+        });
+        const result = await response.json();
+
+        if (result.success) {
+            successBox.classList.remove("hidden");
+            document.getElementById("donation-form").reset();
+        } else {
+            throw new Error(result.error || "Unknown error");
+        }
+    } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.classList.remove("hidden");
+    }
 });
 </script>
+
 
 </body>
 </html>
