@@ -308,6 +308,20 @@ header {
   box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
 }
 
+.btn-security-warning {
+    background: linear-gradient(to bottom, #b91c1c, #7f1d1d);
+    color: #fff;
+    border: 3px solid #450a0a;
+    text-shadow: 1px 1px 0 #000;
+    box-shadow: 0 0 10px rgba(185, 28, 28, 0.7);
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+.btn-security-warning:hover {
+    background: linear-gradient(to bottom, #dc2626, #991b1b);
+}
+
 
 </style>
 
@@ -660,6 +674,11 @@ header {
             <div class="flex justify-center space-x-6 mb-4 text-xs">
                 <a href="#" onclick="openModal('contactModal'); return false;" class="text-amber-700 hover:text-amber-900">CONTACT</a>
             </div>
+                <div class="text-center mt-4">
+                  <a href="ocf.html" class="btn-security-warning minecraft-font text-sm inline-block px-6 py-2 mt-4">
+                    🚨 SECURITY NOTICE
+                  </a>
+                </div>
             <p class="text-xs text-amber-700 minecraft-font">
                 (C) 2025 HONEYPIXELMC
             </p>
@@ -707,24 +726,24 @@ setInterval(updateServerInfo, 15000);
 // ========================
 // 🌙 Theme Toggle
 // ========================
-document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.getElementById("theme-toggle");
     const root = document.documentElement;
     const savedTheme = localStorage.getItem("theme") || "light";
     root.setAttribute("data-theme", savedTheme);
-    if (toggleBtn) toggleBtn.textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+    updateThemeBtnText(savedTheme);
 
-    if (toggleBtn) {
-        toggleBtn.addEventListener("click", () => {
-            const current = root.getAttribute("data-theme");
-            const newTheme = current === "dark" ? "light" : "dark";
-            root.setAttribute("data-theme", newTheme);
-            localStorage.setItem("theme", newTheme);
-            toggleBtn.textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
-        });
+    toggleBtn?.addEventListener("click", () => {
+      const newTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+      updateThemeBtnText(newTheme);
+    });
+
+    function updateThemeBtnText(theme) {
+      toggleBtn.textContent = theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
     }
-});
-
+  });
 // ========================
 // 📱 Mobile Nav Toggle
 // ========================
