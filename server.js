@@ -20,11 +20,6 @@ admin.initializeApp({
 });
 const db = admin.database();
 
-// Serve OCF Surveillance Page
-app.get("/ocf", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "ocf.html"));
-});
-
 // Stripe Webhook - must come BEFORE express.json()
 app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (req, res) => {
   const sig = req.headers["stripe-signature"];
