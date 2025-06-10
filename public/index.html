@@ -46,40 +46,33 @@
                     0 6px 12px rgba(0,0,0,0.3);
     }
 
-    /* Updated Feature Blocks - Darker background, light text */
     .grass-block {
-        background: linear-gradient(to bottom, #303030 0%, #1a1a1a 100%);
-        border: 2px solid #000;
-        color: white;
+        background: linear-gradient(to bottom, #7cb342 0%, #7cb342 20%, #8d6e63 20%, #8d6e63 100%);
+        border: 2px solid #4a5d23;
     }
 
     .stone-block {
-        background: linear-gradient(135deg, #303030 0%, #1a1a1a 100%);
-        border: 2px solid #000;
-        color: white;
+        background: linear-gradient(135deg, #757575 0%, #616161 50%, #424242 100%);
+        border: 2px solid #303030;
     }
 
     .gold-block {
-        background: linear-gradient(135deg, #303030 0%, #1a1a1a 100%);
-        border: 2px solid #000;
+        background: linear-gradient(135deg, #ffd700 0%, #ffc107 50%, #ff8f00 100%);
+        border: 2px solid #e65100;
         box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        color: white;
     }
 
     .diamond-block {
-        background: linear-gradient(135deg, #303030 0%, #1a1a1a 100%);
-        border: 2px solid #000;
+        background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 50%, #0288d1 100%);
+        border: 2px solid #01579b;
         box-shadow: 0 0 15px rgba(79, 195, 247, 0.6);
-        color: white;
     }
 
     .emerald-block {
-        background: linear-gradient(135deg, #303030 0%, #1a1a1a 100%);
-        border: 2px solid #000;
+        background: linear-gradient(135deg, #4caf50 0%, #388e3c 50%, #2e7d32 100%);
+        border: 2px solid #1b5e20;
         box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-        color: white;
     }
-
 
     .btn-minecraft {
         background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
@@ -423,6 +416,2206 @@
         position: relative;
         justify-content: center;
     }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
 </style>
 
 
@@ -464,27 +2657,6 @@
 </div>
 
 </header>
-
-    <!-- Developer Tools Section (Hidden and no longer using Firebase auth for visibility) -->
-    <!-- This section is left here as a placeholder for structure but effectively removed from user view/interaction. -->
-    <section id="dev" class="hidden tab-content py-16 px-6 text-center">
-        <div class="container mx-auto">
-            <h2 class="minecraft-font text-3xl mb-6 text-green-700">🛠️ Developer Tools</h2>
-            <p class="font-mono text-gray-800">Manage users and view payments below:</p>
-        
-            <!-- User List -->
-            <div id="user-list" class="mt-6 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
-              <p class="text-amber-800 minecraft-font mb-2">🔐 User Accounts:</p>
-              <div id="user-list-container">This content is part of the developer tools which are currently disabled.</div>
-            </div>
-        
-            <!-- Payment History -->
-            <div id="payment-history" class="mt-10 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
-              <p class="text-amber-800 minecraft-font mb-2">💰 Payment Records:</p>
-              <div id="payment-container">This content is part of the developer tools which are currently disabled.</div>
-            </div>
-        </div>
-    </section>
 
     <!-- Login/Signup Modal -->
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden">
@@ -582,7 +2754,7 @@
     <!-- Rules Modal -->
     <div id="rules-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
         <div class="minecraft-inventory p-6 rounded-lg bg-white w-full max-w-md relative">
-            <button onclick="closeRulesModal()" class="absolute top-2 right-3 text-xl font-bold">&times;</button>
+            <button onclick="closeRulesModal()" class="absolute top-2 right-3 text-xl font-bold text-gray-800">&times;</button>
             <h2 class="minecraft-font text-xl text-green-800 mb-4">SERVER RULES 📜</h2>
             <ul class="text-sm text-gray-800 font-mono space-y-2 text-left">
                 <li>&gt; Be respectful to all players</li>
@@ -649,28 +2821,28 @@
             <h2 class="minecraft-font text-3xl text-center mb-12 text-amber-800">GAME FEATURES</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="grass-block rounded-lg p-6 text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 minecraft-block rounded flex items-center justify-center bg-gray-800">
+                    <div class="w-16 h-16 mx-auto mb-4 stone-block rounded flex items-center justify-center">
                         <span class="text-2xl">🏰</span>
                     </div>
                     <h3 class="minecraft-font text-sm text-white mb-3">SURVIVAL MODE</h3>
                     <p class="text-xs text-white">Build, mine, craft and survive with friends in our enhanced survival world</p>
                 </div>
                 <div class="gold-block rounded-lg p-6 text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 minecraft-block rounded flex items-center justify-center bg-gray-800">
+                    <div class="w-16 h-16 mx-auto mb-4 minecraft-block rounded flex items-center justify-center">
                         <span class="text-2xl">💰</span>
                     </div>
                     <h3 class="minecraft-font text-sm text-white mb-3">ECONOMY</h3>
                     <p class="text-xs text-white">Trade items, run shops, and build your wealth in our player economy</p>
                 </div>
                 <div class="diamond-block rounded-lg p-6 text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 minecraft-block rounded flex items-center justify-center bg-gray-800">
+                    <div class="w-16 h-16 mx-auto mb-4 stone-block rounded flex items-center justify-center">
                         <span class="text-2xl">🎮</span>
                     </div>
                     <h3 class="minecraft-font text-sm text-white mb-3">MINIGAMES</h3>
                     <p class="text-xs text-white">PvP arenas, parkour, build competitions and more fun activities</p>
                 </div>
                 <div class="emerald-block rounded-lg p-6 text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 minecraft-block rounded flex items-center justify-center bg-gray-800">
+                    <div class="w-16 h-16 mx-auto mb-4 minecraft-block rounded flex items-center justify-center">
                         <span class="text-2xl">👥</span>
                     </div>
                     <h3 class="minecraft-font text-sm text-white mb-3">COMMUNITY</h3>
@@ -771,8 +2943,8 @@
 
     <!-- Contact Modal -->
     <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="minecraft-inventory rounded-lg p-8 bg-white relative w-full max-w-xs text-center">
-            <button onclick="closeModal('contactModal')" class="absolute top-2 right-2 text-xl font-bold text-gray-800">&times;</button>
+        <div class="bg-white rounded-lg max-w-lg w-11/12 p-6 relative">
+            <button onclick="closeModal('contactModal')" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 font-bold text-xl">&times;</button>
             <h2 class="minecraft-font text-2xl mb-4 text-amber-900">Contact Us</h2>
             <p class="text-gray-800 font-mono text-sm mb-4">Contact the Site Dev:</p>
             <div class="flex justify-center space-x-6">
@@ -783,72 +2955,7 @@
         </div>
     </div>
 
-      <!-- Dev Team Section (re-added) -->
-<section id="devs" class="py-16 px-4 creeper-bg">
-  <div class="container mx-auto text-center">
-    <h2 class="minecraft-font text-3xl text-amber-800 mb-8">MEET THE DEV 🛠️</h2>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <!-- Dev Card -->
-      <div class="minecraft-inventory p-6 rounded-lg bg-white shadow-md transform hover:scale-105 transition-all duration-300 relative overflow-hidden group">
-        <!-- Code Background Effect -->
-        <div class="absolute inset-0 opacity-5 pointer-events-none">
-          <pre class="text-xs font-mono text-green-600 whitespace-pre">
-            function devCode() {
-              while(true) {
-                createAwesome();
-                fixBugs();
-                drinkCoffee();
-              }
-            }
-          </pre>
-        </div>
-
-        <!-- Dev Avatar -->
-        <div class="relative z-10 mb-4">
-          <div class="w-24 h-24 mx-auto diamond-block rounded-full flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
-            <span class="text-4xl">👑</span>
-          </div>
-        </div>
-
-        <!-- Dev Info -->
-        <div class="relative z-10">
-          <h3 class="minecraft-font text-2xl text-amber-800 mb-2 group-hover:text-amber-600 transition-colors">ChickenWithACrown</h3>
-          <div class="minecraft-font text-sm text-gray-700 mb-3 bg-amber-50 p-2 rounded-lg inline-block">
-            Lead Developer
-          </div>
-          <p class="text-sm text-gray-600 font-mono mb-4 leading-relaxed">
-            &gt; Backend Wizard<br>
-            &gt; Server Architect<br>
-            &gt; Feature Creator
-          </p>
-
-          <!-- Tech Stack -->
-          <div class="flex flex-wrap justify-center gap-2 mb-4">
-            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Node.js</span>
-            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Firebase</span>
-            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Minecraft</span>
-          </div>
-
-          <!-- Social Links -->
-          <div class="flex justify-center space-x-3">
-            <a href="https://www.youtube.com/@ChickenWithACrown" target="_blank" 
-               class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-110 transition-transform flex items-center">
-              <span class="mr-1">🎥</span> YouTube
-            </a>
-            <a href="https://cash.app/$DanielUpperman06" target="_blank" 
-               class="stone-block px-4 py-2 text-white minecraft-font text-xs hover:scale-110 transition-transform flex items-center">
-              <span class="mr-1">💸</span> CashApp
-            </a>
-          </div>
-
-          <!-- Hover Effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-amber-500/10 to-amber-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+      <!-- Removed Dev Team Section from HTML -->
 
     <!-- Server Stats -->
     <section class="bg-stone-600 py-12 px-4">
@@ -905,8 +3012,19 @@
 // ✅ Firebase Setup
 // ========================
 let firebaseConfig;
-let auth;
-let db;
+let auth; // Declare auth globally
+let db;   // Declare db globally
+fetch('/get-firebase-config')
+  .then(response => response.json())
+  .then(config => {
+    firebaseConfig = config;
+    firebase.initializeApp(firebaseConfig); // <--- This line is critical
+    auth = firebase.auth(); // Assign to the global auth
+    db = firebase.database();     // Assign to the global db
+
+    // Call the new function to set up authentication and database features
+    setupFirebaseDependentFeatures(auth, db);
+  });
 
 // The __firebase_config and __initial_auth_token global variables are provided by the environment.
 // We parse the firebaseConfig from the string.
@@ -915,8 +3033,6 @@ firebaseConfig = JSON.parse(rawFirebaseConfig);
 
 // Initialize Firebase App
 const app = firebase.initializeApp(firebaseConfig);
-auth = firebase.auth();
-db = firebase.database();
 
 // Firebase authentication
 auth.onAuthStateChanged(async (user) => {
@@ -993,8 +3109,7 @@ function closeMessageModal() {
 // ========================
 async function updateServerInfo() {
     try {
-        // Updated to use the Bedrock API endpoint for mcsrvstat.us
-        const response = await fetch("https://api.mcsrvstat.us/bedrock/3/185.83.152.200:19132"); 
+        const response = await fetch("https://api.mcsrvstat.us/3/185.83.152.200:19132");
         const data = await response.json();
         document.getElementById("playerCount").textContent = data.players?.online ?? "0";
         document.getElementById("maxPlayers").textContent = data.players?.max ?? "0";
@@ -1285,9 +3400,11 @@ if (logoutBtn) {
 // ========================
 function setupFirebaseDependentFeatures(auth, db) {
     // This function will be called once Firebase auth and DB are initialized.
+    // All auth/DB dependent code should be here.
 
     auth.onAuthStateChanged(async user => {
-        // The dev section element ('#dev') is permanently hidden and its logic removed.
+        // Dev tools section and related logic entirely removed
+        // The 'devTab' element no longer exists in HTML, so no need to reference it.
 
         if (user) {
             loginBtn?.classList.add('hidden');
@@ -1305,12 +3422,15 @@ function setupFirebaseDependentFeatures(auth, db) {
                     }
                 });
             }
+            // No longer checking for 'dev' role as dev tools are removed
         } else {
             loginBtn?.classList.remove('hidden');
             logoutBtn?.classList.add('hidden');
             userInfo?.classList.add('hidden');
         }
     });
+
+    // Removed window.loadAllUsers and window.loadPayments as dev tools are removed
 }
 
 
@@ -1360,8 +3480,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     throw new Error(result.error || "Unknown error during donation initiation.");
                 }
-            }
-            catch (err) {
+            } catch (err) {
                 console.error("Donation initiation error:", err);
                 displayMessage(`Donation failed: ${err.message}`, "error");
             }
