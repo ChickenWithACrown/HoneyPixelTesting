@@ -11,7 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script src="https://www.paypal.com/sdk/js?client-id=AWhTexu2paInr5MSskUleb9RBE5rbSP3Rbwdcbxm8feY6XmT7dcSlowYD-wuny6WmNPIlz3MiXvgfOPn&currency=USD"></script>
     
    <!--- SEO --->
     <meta name="description" content="HoneyPixelMC - Cozy Minecraft survival with economy, events, and community.">
@@ -313,62 +312,219 @@
         box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
     }
 
-    .btn-security-warning {
-        background: linear-gradient(to bottom, #b91c1c, #7f1d1d);
-        color: #fff;
-        border: 3px solid #450a0a;
-        text-shadow: 1px 1px 0 #000;
-        box-shadow: 0 0 10px rgba(185, 28, 28, 0.7);
-        border-radius: 6px;
-        font-weight: bold;
-        transition: background 0.3s ease;
-    }
-    .btn-security-warning:hover {
-        background: linear-gradient(to bottom, #dc2626, #991b1b);
-    }
-
-    /* Minecraft-like Animations */
-    @keyframes scroll {
-        from { background-position: 0 0; }
-        to { background-position: 100% 100%; }
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
     }
 
-    .animate-scroll {
-        animation: scroll 20s linear infinite;
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
     }
 
-    /* Enhanced Minecraft Blocks */
-    .minecraft-block {
-        background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #4a2c17 100%);
-        border: 2px solid #2d1810;
-        box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3), 
-                   inset -2px -2px 4px rgba(0,0,0,0.3),
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
                    0 4px 8px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
     }
 
-    .minecraft-block:hover {
-        transform: translateY(-2px);
-        box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3), 
-                   inset -2px -2px 4px rgba(0,0,0,0.3),
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
                    0 6px 12px rgba(0,0,0,0.3);
     }
 
-    /* Enhanced Buttons */
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
     .btn-minecraft {
         background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
         border: 3px solid #3e2723;
         color: white;
         text-shadow: 2px 2px 0px #000;
-        transition: all 0.2s ease;
-        position: relative;
-        overflow: hidden;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
     }
 
     .btn-minecraft:hover {
         background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     .btn-minecraft:active {
@@ -418,241 +574,1827 @@
                    0 6px 12px rgba(0,0,0,0.3);
     }
 
-    /* Pixel Art Border */
-    .pixel-border {
-        border: 4px solid;
-        border-image: url("data:image/svg+xml,%3csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3e%3cdefs%3e%3cpattern id='a' patternUnits='userSpaceOnUse' width='10' height='10'%3e%3cpath d='M0 0h5v5H0zm5 5h5v5H5z' fill='%23000'/%3e%3c/pattern%3e%3c/defs%3e%3cpath fill='url(%23a)' d='M0 0h100v100H0z'/%3e%3c/svg%3e") 4;
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
     }
 
-    /* Dark Mode Enhancements */
-    [data-theme="dark"] .minecraft-inventory {
-        background: #2d2d2d;
-        border-color: #000;
-        box-shadow: inset 3px 3px 0px #4a4a4a, 
-                   inset -3px -3px 0px #1a1a1a;
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
     }
 
-    [data-theme="dark"] .btn-minecraft {
-        background: linear-gradient(to bottom, #6d4c41 0%, #4e342e 100%);
-        border-color: #2d1810;
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
     }
 
-    [data-theme="dark"] .btn-minecraft:hover {
-        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
     }
 
-    /* Enhanced Animations & Effects */
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-        100% { transform: translateY(0px); }
+    .delay-100 {
+        animation-delay: 0.1s;
     }
 
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
+    .delay-200 {
+        animation-delay: 0.2s;
     }
 
-    @keyframes glow {
-        0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-        50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
-        100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+    .delay-300 {
+        animation-delay: 0.3s;
     }
 
-    /* Enhanced Block Effects */
-    .minecraft-block {
-        animation: float 6s ease-in-out infinite;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    .delay-400 {
+        animation-delay: 0.4s;
     }
 
-    .gold-block {
-        animation: glow 3s ease-in-out infinite;
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
     }
 
-    .diamond-block {
-        animation: pulse 4s ease-in-out infinite;
-    }
-
-    /* Enhanced Button Effects */
-    .btn-minecraft {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    .drip-strip {
         position: relative;
-        overflow: hidden;
+        justify-content: center;
     }
 
-    .btn-minecraft::before {
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
         content: '';
         position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
         background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.2),
-            transparent
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
         );
-        transition: 0.5s;
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
     }
 
-    .btn-minecraft:hover::before {
-        left: 100%;
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
     }
 
     /* Enhanced Inventory UI */
     .minecraft-inventory {
-        backdrop-filter: blur(5px);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .minecraft-inventory:hover {
-        transform: translateY(-2px);
-    }
-
-    /* Particle Background */
-    .particle-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-        opacity: 0.1;
-        background-image: 
-            radial-gradient(circle at 25% 25%, #facc15 1px, transparent 1px),
-            radial-gradient(circle at 75% 75%, #facc15 1px, transparent 1px);
-        background-size: 50px 50px;
-        animation: particleMove 20s linear infinite;
-    }
-
-    @keyframes particleMove {
-        0% { background-position: 0 0; }
-        100% { background-position: 50px 50px; }
-    }
-
-    /* Enhanced Section Transitions */
-    section {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    section.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* Enhanced Text Effects */
-    .minecraft-font {
-        text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
-        letter-spacing: 1px;
-    }
-
-    /* Enhanced Dark Mode */
-    [data-theme="dark"] {
-        --bg-color: #121212;
-        --text-color: #ffffff;
-        --block-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    }
-
-    [data-theme="dark"] .minecraft-inventory {
-        background: rgba(45, 45, 45, 0.9);
-        border-color: #2d2d2d;
-    }
-
-    [data-theme="dark"] .btn-minecraft {
-        background: linear-gradient(to bottom, #6d4c41 0%, #4e342e 100%);
-        border-color: #2d1810;
-    }
-
-    /* Enhanced Loading States */
-    .loading {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .loading::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.2),
-            transparent
-        );
-        animation: loading 1.5s infinite;
-    }
-
-    @keyframes loading {
-        0% { left: -100%; }
-        100% { left: 100%; }
-    }
-
-    /* Enhanced Modal Transitions */
-    .modal {
-        opacity: 0;
-        transform: scale(0.9);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .modal.show {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    /* Enhanced Server Status */
-    .status-indicator {
-        position: relative;
-        padding-left: 1.5rem;
-    }
-
-    .status-indicator::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 0.75rem;
-        height: 0.75rem;
-        border-radius: 50%;
-        background: #ef4444;
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
     }
 
-    .status-indicator.online::before {
-        background: #22c55e;
-        box-shadow: 0 0 10px #22c55e;
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
     }
 
-    .tech-stack {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
         justify-content: center;
     }
 
-    .tech-stack span {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-size: 0.75rem;
-        font-family: monospace;
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
     }
 
-    @keyframes codeScroll {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(-100%); }
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
     }
 
-    .code-bg {
-        animation: codeScroll 20s linear infinite;
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
+    }
+
+    /* Toggle Light/Dark */
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+        padding: 1rem;
+        text-align: right;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+    main {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
+
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav-menu.show {
+            display: flex;
+        }
+    }
+
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .inventory-slot {
+        width: 36px;
+        height: 36px;
+        background: #8b8b8b;
+        border: 2px solid #000;
+        box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #5a5a5a;
+    }
+
+    .health-bar {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23ff0000' d='M10 17l-5.878-3.09A6 6 0 0 1 2 8.5C2 5.462 4.462 3 7.5 3c1.636 0 3.09.794 4 2.022A4.994 4.994 0 0 1 15.5 3C18.538 3 21 5.462 21 8.5a6 6 0 0 1-2.122 4.59L10 17z'/%3E%3C/svg%3E") repeat-x;
+    }
+
+    .creeper-bg {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23388e3c' fill-opacity='0.05'%3E%3Cpath d='M8 8h8v8H8zm16 0h8v8h-8zm-8 8h8v8h-8zm0 16h8v8h-8z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .honey-drop {
+        width: 10px;
+        height: 20px;
+        background-color: #facc15;
+        border-radius: 0 0 100% 100%;
+        margin: 0 6px;
+        animation: dripDown 1.5s infinite ease-in-out;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dripDown {
+        0% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(8px) scaleY(1.2);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-8px) scaleY(0.5);
+            opacity: 0.5;
+        }
+    }
+
+    .drip-strip {
+        position: relative;
+        justify-content: center;
     }
 </style>
 
@@ -695,26 +2437,6 @@
 </div>
 
 </header>
-
-
-        <section id="dev" class="hidden tab-content py-16 px-6 text-center">
-          <div class="container mx-auto">
-            <h2 class="minecraft-font text-3xl mb-6 text-green-700">🛠️ Developer Tools</h2>
-            <p class="font-mono text-gray-800">Manage users and view payments below:</p>
-        
-            <!-- User List -->
-            <div id="user-list" class="mt-6 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
-              <p class="text-amber-800 minecraft-font mb-2">🔐 User Accounts:</p>
-              <div id="user-list-container">Loading users...</div>
-            </div>
-        
-            <!-- Payment History -->
-            <div id="payment-history" class="mt-10 space-y-4 text-left max-w-2xl mx-auto font-mono text-sm">
-              <p class="text-amber-800 minecraft-font mb-2">💰 Payment Records:</p>
-              <div id="payment-container">Select a user to view donations.</div>
-            </div>
-          </div>
-        </section>
 
     <!-- Login/Signup Modal -->
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden">
@@ -760,8 +2482,14 @@
             
             <div class="minecraft-inventory rounded-lg p-6 inline-block mb-8 transform hover:scale-105 transition-transform duration-300 shadow-lg">
                 <div class="minecraft-font text-lg text-green-800 mb-3">SERVER INFO</div>
-                <div class="text-2xl font-mono font-bold text-amber-700 mb-2 hover:text-amber-600 transition-colors cursor-pointer" onclick="copyServerIP()">
-                    lifesteal.honeypixelmc.com
+                <!-- Server IP Display or Message -->
+                <div id="server-ip-section">
+                    <div id="server-ip-display" class="text-2xl font-mono font-bold text-amber-700 mb-2 hover:text-amber-600 transition-colors cursor-pointer hidden" onclick="copyServerIP()">
+                        lifesteal.honeypixelmc.com
+                    </div>
+                    <div id="ip-hidden-message" class="text-lg font-mono text-gray-600 mb-2">
+                        Available on release!
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>VERSION: <span id="serverVersion" class="text-blue-600">Loading...</span></div>
@@ -772,7 +2500,8 @@
             </div>
             
             <div class="flex justify-center space-x-4 mt-8">
-                <button onclick="copyServerIP()" class="btn-minecraft px-8 py-4 minecraft-font text-sm hover:scale-105 transition-transform shadow-lg">
+                <!-- START PLAYING button - Hidden until countdown is zero -->
+                <button id="start-playing-btn" onclick="copyServerIP()" class="btn-minecraft px-8 py-4 minecraft-font text-sm hover:scale-105 transition-transform shadow-lg hidden" disabled>
                     START PLAYING
                 </button>
                 <button onclick="openRulesModal()" class="stone-block text-white px-8 py-4 minecraft-font text-sm hover:scale-105 transition-transform shadow-lg">
@@ -961,7 +2690,7 @@
 
                     <!-- Action Buttons -->
                     <div class="flex flex-wrap justify-center gap-4">
-                        <button onclick="copyServerIP()" class="btn-minecraft px-6 py-3 minecraft-font text-sm hover:scale-105 transition-transform">
+                        <button id="events-copy-ip-btn" onclick="copyServerIP()" class="btn-minecraft px-6 py-3 minecraft-font text-sm hover:scale-105 transition-transform hidden" disabled>
                             📋 COPY IP
                         </button>
                         <a href="https://discord.gg/YU25e7Mn9b" target="_blank" class="btn-minecraft px-6 py-3 minecraft-font text-sm hover:scale-105 transition-transform">
@@ -1006,72 +2735,8 @@
         </div>
     </div>
 
-      <!-- Dev Team Section -->
-<section id="devs" class="py-16 px-4 creeper-bg">
-  <div class="container mx-auto text-center">
-    <h2 class="minecraft-font text-3xl text-amber-800 mb-8">MEET THE DEV 🛠️</h2>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Removed Dev Team Section from HTML -->
 
-      <!-- Dev Card -->
-      <div class="minecraft-inventory p-6 rounded-lg bg-white shadow-md transform hover:scale-105 transition-all duration-300 relative overflow-hidden group">
-        <!-- Code Background Effect -->
-        <div class="absolute inset-0 opacity-5 pointer-events-none">
-          <pre class="text-xs font-mono text-green-600 whitespace-pre">
-            function devCode() {
-              while(true) {
-                createAwesome();
-                fixBugs();
-                drinkCoffee();
-              }
-            }
-          </pre>
-        </div>
-
-        <!-- Dev Avatar -->
-        <div class="relative z-10 mb-4">
-          <div class="w-24 h-24 mx-auto diamond-block rounded-full flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
-            <span class="text-4xl">👑</span>
-          </div>
-        </div>
-
-        <!-- Dev Info -->
-        <div class="relative z-10">
-          <h3 class="minecraft-font text-2xl text-amber-800 mb-2 group-hover:text-amber-600 transition-colors">ChickenWithACrown</h3>
-          <div class="minecraft-font text-sm text-gray-700 mb-3 bg-amber-50 p-2 rounded-lg inline-block">
-            Lead Developer
-          </div>
-          <p class="text-sm text-gray-600 font-mono mb-4 leading-relaxed">
-            &gt; Backend Wizard<br>
-            &gt; Server Architect<br>
-            &gt; Feature Creator
-          </p>
-
-          <!-- Tech Stack -->
-          <div class="flex flex-wrap justify-center gap-2 mb-4">
-            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Node.js</span>
-            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Firebase</span>
-            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Minecraft</span>
-          </div>
-
-          <!-- Social Links -->
-          <div class="flex justify-center space-x-3">
-            <a href="https://www.youtube.com/@ChickenWithACrown" target="_blank" 
-               class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-110 transition-transform flex items-center">
-              <span class="mr-1">🎥</span> YouTube
-            </a>
-            <a href="https://cash.app/$DanielUpperman06" target="_blank" 
-               class="stone-block px-4 py-2 text-white minecraft-font text-xs hover:scale-110 transition-transform flex items-center">
-              <span class="mr-1">💸</span> CashApp
-            </a>
-          </div>
-
-          <!-- Hover Effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-amber-500/10 to-amber-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
     <!-- Server Stats -->
     <section class="bg-stone-600 py-12 px-4">
         <div class="container mx-auto">
@@ -1130,24 +2795,92 @@ let firebaseConfig;
 let auth;
 let db;
 
-fetch('/get-firebase-config')
-  .then(response => response.json())
-  .then(config => {
-    firebaseConfig = config;
-    firebase.initializeApp(firebaseConfig);
-    auth = firebase.auth();
-    db = firebase.database();
+// The __firebase_config and __initial_auth_token global variables are provided by the environment.
+// We parse the firebaseConfig from the string.
+const rawFirebaseConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
+firebaseConfig = JSON.parse(rawFirebaseConfig);
 
-    // Call the new function to set up authentication and database features
+// Initialize Firebase App
+const app = firebase.initializeApp(firebaseConfig);
+auth = firebase.auth();
+db = firebase.database();
+
+// Firebase authentication
+auth.onAuthStateChanged(async (user) => {
+    // If an initial auth token is provided (for persistent sessions), sign in.
+    // Otherwise, sign in anonymously.
+    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+        try {
+            await auth.signInWithCustomToken(__initial_auth_token);
+            console.log("Signed in with custom token.");
+        } catch (error) {
+            console.error("Error signing in with custom token:", error);
+            // Fallback to anonymous sign-in if custom token fails
+            try {
+                await auth.signInAnonymously();
+                console.log("Signed in anonymously due to custom token error.");
+            } catch (anonError) {
+                console.error("Error signing in anonymously:", anonError);
+                // Display user-friendly error message if sign-in fails
+                displayMessage("Error: Could not authenticate. Please try again.", "error");
+            }
+        }
+    } else {
+        try {
+            await auth.signInAnonymously();
+            console.log("Signed in anonymously.");
+        } catch (error) {
+            console.error("Error signing in anonymously:", error);
+            displayMessage("Error: Could not authenticate. Please try again.", "error");
+        }
+    }
+
+    // Now that auth is ready, set up Firebase dependent features
     setupFirebaseDependentFeatures(auth, db);
-  });
+});
+
+
+// Function to display messages in a custom modal or alert
+function displayMessage(message, type = 'info') {
+    const modal = document.getElementById('message-modal');
+    const messageText = document.getElementById('message-text');
+    const messageTitle = document.getElementById('message-title');
+    
+    if (!modal || !messageText || !messageTitle) {
+        // Fallback to console log if modal elements aren't found
+        console.warn(`Message Modal not found. Message: ${message}`);
+        // As a last resort, for debugging, you might use console.error
+        // console.error(message);
+        return;
+    }
+
+    messageText.textContent = message;
+    if (type === 'error') {
+        messageTitle.textContent = "Error!";
+        messageTitle.classList.add('text-red-600');
+        messageTitle.classList.remove('text-green-600');
+    } else if (type === 'success') {
+        messageTitle.textContent = "Success!";
+        messageTitle.classList.add('text-green-600');
+        messageTitle.classList.remove('text-red-600');
+    } else {
+        messageTitle.textContent = "Info";
+        messageTitle.classList.remove('text-red-600', 'text-green-600');
+    }
+    modal.classList.remove('hidden');
+}
+
+function closeMessageModal() {
+    document.getElementById('message-modal').classList.add('hidden');
+}
+
 
 // ========================
 // 🖥 Server Status Updater
 // ========================
 async function updateServerInfo() {
     try {
-        const response = await fetch("https://api.mcsrvstat.us/3/lifesteal.honeypixelmc.com");
+        const response = await fetch("https://api.mcsrvstat.us/3/185.83.152.200:19132");
         const data = await response.json();
         document.getElementById("playerCount").textContent = data.players?.online ?? "0";
         document.getElementById("maxPlayers").textContent = data.players?.max ?? "0";
@@ -1158,6 +2891,7 @@ async function updateServerInfo() {
         document.getElementById("serverType").textContent = data.software?.toUpperCase() ?? "SURVIVAL";
     } catch (error) {
         console.error("Failed to fetch server info:", error);
+        displayMessage("Failed to fetch server status. Please try refreshing.", "error");
     }
 }
 updateServerInfo();
@@ -1200,10 +2934,21 @@ function visitShop() {
 }
 function copyServerIP() {
     const ip = "lifesteal.honeypixelmc.com";
-    navigator.clipboard.writeText(ip)
-        .then(() => alert(`✅ Server IP copied: ${ip}`))
-        .catch(() => alert("⚠️ Could not copy IP."));
+    // Using execCommand for broader compatibility within iframes
+    const tempInput = document.createElement('input');
+    tempInput.value = ip;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    try {
+        document.execCommand('copy');
+        displayMessage(`✅ Server IP copied: ${ip}`, 'success');
+    } catch (err) {
+        console.error("Failed to copy text:", err);
+        displayMessage("⚠️ Could not copy IP automatically. Please copy it manually: " + ip, 'error');
+    }
+    document.body.removeChild(tempInput);
 }
+
 function openRulesModal() {
     document.getElementById("rules-modal")?.classList.remove("hidden");
 }
@@ -1264,7 +3009,6 @@ function openGuidePage(page) {
 const loginBtn = document.getElementById('login-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const userInfo = document.getElementById('user-info');
-const devTabs = document.getElementById('dev-tabs');
 
 const authModal = document.getElementById('auth-modal');
 const closeAuthModal = document.getElementById('close-auth-modal');
@@ -1279,33 +3023,42 @@ const googleAuthBtn = document.getElementById('google-auth-btn');
 
 let isLoginMode = true;
 
-loginBtn.onclick = () => {
-    authModal.classList.remove('hidden');
-    isLoginMode = true;
-    setAuthMode();
-};
-closeAuthModal.onclick = () => {
-    authModal.classList.add('hidden');
-    authError.textContent = '';
-    authForm.reset();
-};
-toggleAuthMode.onclick = (e) => {
-    e.preventDefault();
-    isLoginMode = !isLoginMode;
-    setAuthMode();
-    authError.textContent = '';
-    authForm.reset();
-};
+// Ensure elements exist before adding event listeners
+if (loginBtn) {
+    loginBtn.onclick = () => {
+        authModal?.classList.remove('hidden');
+        isLoginMode = true;
+        setAuthMode();
+    };
+}
+if (closeAuthModal) {
+    closeAuthModal.onclick = () => {
+        authModal?.classList.add('hidden');
+        if (authError) authError.textContent = '';
+        authForm?.reset();
+    };
+}
+if (toggleAuthMode) {
+    toggleAuthMode.onclick = (e) => {
+        e.preventDefault();
+        isLoginMode = !isLoginMode;
+        setAuthMode();
+        if (authError) authError.textContent = '';
+        authForm?.reset();
+    };
+}
 
 function setAuthMode() {
-    if (isLoginMode) {
-        authModalTitle.textContent = 'Login';
-        authSubmitBtn.textContent = 'Login';
-        toggleAuthMode.textContent = 'Need an account? Sign up';
-    } else {
-        authModalTitle.textContent = 'Sign Up';
-        authSubmitBtn.textContent = 'Sign Up';
-        toggleAuthMode.textContent = 'Already have an account? Login';
+    if (authModalTitle && authSubmitBtn && toggleAuthMode) {
+        if (isLoginMode) {
+            authModalTitle.textContent = 'Login';
+            authSubmitBtn.textContent = 'Login';
+            toggleAuthMode.textContent = 'Need an account? Sign up';
+        } else {
+            authModalTitle.textContent = 'Sign Up';
+            authSubmitBtn.textContent = 'Sign Up';
+            toggleAuthMode.textContent = 'Already have an account? Login';
+        }
     }
 }
 
@@ -1313,158 +3066,199 @@ function setAuthMode() {
 // 🛡 Ensure Realtime DB User Record
 // ========================
 async function ensureUserInRealtimeDB(user) {
-    if (!user) return;
-    const userRef = db.ref('users/' + user.uid);
-    const snapshot = await userRef.get();
-    if (!snapshot.exists()) {
-        await userRef.set({ email: user.email, role: "member" });
+    if (!user || !db) return; // Ensure db is initialized
+    try {
+        const userRef = db.ref('users/' + user.uid);
+        const snapshot = await userRef.get();
+        if (!snapshot.exists()) {
+            await userRef.set({ email: user.email }); // Removed role field as it's not managed client-side
+            console.log("New user record created in Realtime DB.");
+        } else {
+            console.log("User record already exists in Realtime DB.");
+        }
+    } catch (e) {
+        console.error("Error ensuring user in Realtime DB:", e);
+        displayMessage("Failed to create user record. Please try again.", "error");
     }
 }
 
 // ========================
 // 📩 Email/Password Submit
 // ========================
-authForm.onsubmit = async (e) => {
-    e.preventDefault();
-    authError.textContent = '';
-    const email = authEmail.value;
-    const password = authPassword.value;
+if (authForm) {
+    authForm.onsubmit = async (e) => {
+        e.preventDefault();
+        if (authError) authError.textContent = '';
+        const email = authEmail?.value;
+        const password = authPassword?.value;
 
-    try {
-        let userCredential;
-        if (isLoginMode) {
-            userCredential = await auth.signInWithEmailAndPassword(email, password);
-        } else {
-            userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            await ensureUserInRealtimeDB(userCredential.user);
+        if (!email || !password) {
+            if (authError) authError.textContent = 'Email and password are required.';
+            return;
         }
-        authModal.classList.add('hidden');
-        authForm.reset();
-    } catch (err) {
-        authError.textContent = err.message.replace('Firebase:', '');
-        authError.classList.add("text-red-600", "font-bold");
-        authForm.classList.add("animate-shake");
-        setTimeout(() => authForm.classList.remove("animate-shake"), 500);
-    }
-};
+
+        try {
+            let userCredential;
+            if (isLoginMode) {
+                userCredential = await auth.signInWithEmailAndPassword(email, password);
+                displayMessage("Successfully logged in!", "success");
+            } else {
+                userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                await ensureUserInRealtimeDB(userCredential.user);
+                displayMessage("Account created successfully! Please log in.", "success");
+            }
+            authModal?.classList.add('hidden');
+            authForm.reset();
+        } catch (err) {
+            console.error("Auth error:", err);
+            if (authError) {
+                authError.textContent = err.message.replace('Firebase:', '');
+                authError.classList.add("text-red-600", "font-bold");
+                authForm.classList.add("animate-shake");
+                setTimeout(() => authForm.classList.remove("animate-shake"), 500);
+            }
+            displayMessage(`Authentication failed: ${err.message}`, "error");
+        }
+    };
+}
+
 
 // ========================
 // 🔐 Google Login Handler
 // ========================
-googleAuthBtn.onclick = async (e) => {
-    e.preventDefault();
-    authError.textContent = '';
-    try {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const result = await auth.signInWithPopup(provider);
-        await ensureUserInRealtimeDB(result.user);
-        authModal.classList.add('hidden');
-        authForm.reset();
-    } catch (err) {
-        authError.textContent = err.message.replace('Firebase:', '');
-        authError.classList.add("text-red-600", "font-bold");
-        authForm.classList.add("animate-shake");
-        setTimeout(() => authForm.classList.remove("animate-shake"), 500);
-    }
-};
+if (googleAuthBtn) {
+    googleAuthBtn.onclick = async (e) => {
+        e.preventDefault();
+        if (authError) authError.textContent = '';
+        try {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            const result = await auth.signInWithPopup(provider);
+            await ensureUserInRealtimeDB(result.user);
+            authModal?.classList.add('hidden');
+            authForm?.reset();
+            displayMessage("Signed in with Google successfully!", "success");
+        } catch (err) {
+            console.error("Google Auth error:", err);
+            if (authError) {
+                authError.textContent = err.message.replace('Firebase:', '');
+                authError.classList.add("text-red-600", "font-bold");
+                authForm?.classList.add("animate-shake");
+                setTimeout(() => authForm?.classList.remove("animate-shake"), 500);
+            }
+            displayMessage(`Google sign-in failed: ${err.message}`, "error");
+        }
+    };
+}
 
 // ========================
 // 🚪 Logout Handler
 // ========================
-logoutBtn.onclick = () => auth.signOut();
-
-// ========================
-// 🚦 Auth State Listener
-// ========================
-auth.onAuthStateChanged(async user => {
-    const devTab = document.getElementById("dev-tab");
-
-    if (user) {
-        loginBtn.classList.add('hidden');
-        logoutBtn.classList.remove('hidden');
-        userInfo.classList.remove('hidden');
-        userInfo.innerHTML = `
-            <span id="masked-identity">[Hidden]</span>
-            <button id="toggle-identity" title="Show email" class="text-sm ml-2">👁</button>
-        `;
-        document.getElementById("toggle-identity").onclick = () => {
-            const span = document.getElementById("masked-identity");
-            span.textContent = span.textContent === "[Hidden]" ? (user.displayName || user.email) : "[Hidden]";
-        };
-
-        let role = "member";
+if (logoutBtn) {
+    logoutBtn.onclick = async () => {
         try {
-            const userSnap = await db.ref('users/' + user.uid).get();
-            if (userSnap.exists() && userSnap.val().role === "dev") {
-                role = "dev";
+            await auth.signOut();
+            displayMessage("Logged out successfully!", "success");
+        } catch (error) {
+            console.error("Logout error:", error);
+            displayMessage(`Logout failed: ${error.message}`, "error");
+        }
+    };
+}
+
+
+// ========================
+// 🚦 Auth State Listener (Moved into setupFirebaseDependentFeatures)
+// ========================
+function setupFirebaseDependentFeatures(auth, db) {
+    // This function will be called once Firebase auth and DB are initialized.
+    // All auth/DB dependent code should be here.
+
+    auth.onAuthStateChanged(async user => {
+        // Dev tools section and related logic entirely removed
+        // The 'devTab' element no longer exists in HTML, so no need to reference it.
+
+        if (user) {
+            loginBtn?.classList.add('hidden');
+            logoutBtn?.classList.remove('hidden');
+            userInfo?.classList.remove('hidden');
+            if (userInfo) {
+                userInfo.innerHTML = `
+                    <span id="masked-identity">[Hidden]</span>
+                    <button id="toggle-identity" title="Show email" class="text-sm ml-2">👁</button>
+                `;
+                document.getElementById("toggle-identity")?.addEventListener("click", () => {
+                    const span = document.getElementById("masked-identity");
+                    if (span) {
+                        span.textContent = span.textContent === "[Hidden]" ? (user.displayName || user.email || user.uid) : "[Hidden]";
+                    }
+                });
             }
-        } catch (e) {
-            console.error("Error checking user role:", e);
-        }
-
-        if (role === "dev") {
-            if (devTab) devTab.classList.remove("hidden");
-            loadAllUsers?.();
+            // No longer checking for 'dev' role as dev tools are removed
         } else {
-            if (devTab) devTab.classList.add("hidden");
+            loginBtn?.classList.remove('hidden');
+            logoutBtn?.classList.add('hidden');
+            userInfo?.classList.add('hidden');
         }
-    } else {
-        loginBtn.classList.remove('hidden');
-        logoutBtn.classList.add('hidden');
-        userInfo.classList.add('hidden');
-        if (devTab) devTab.classList.add("hidden");
-    }
-});
+    });
+
+    // Removed window.loadAllUsers and window.loadPayments as dev tools are removed
+}
+
 
 // ========================
-// 💸 Donation Submission
+// 💸 Donation Submission (Updated to use displayMessage)
 // ========================
-document.getElementById("donation-form")?.addEventListener("submit", async (e) => {
-    e.preventDefault();
+// The donation-form event listener needs to be outside setupFirebaseDependentFeatures
+// but ensure it's added only once and after the elements exist.
+document.addEventListener("DOMContentLoaded", () => {
+    const donationForm = document.getElementById("donation-form");
+    if (donationForm) {
+        donationForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-    const discord = document.getElementById("donor-discord").value.trim();
-    const amount = document.getElementById("donor-amount").value.trim();
-    const message = document.getElementById("donor-message").value.trim();
-    const errorBox = document.getElementById("donation-error");
-    const successBox = document.getElementById("donation-success");
+            const discord = document.getElementById("donor-discord")?.value.trim();
+            const amount = document.getElementById("donor-amount")?.value.trim();
+            const message = document.getElementById("donor-message")?.value.trim();
 
-    errorBox.classList.add("hidden");
-    successBox.classList.add("hidden");
+            if (!discord || !amount) {
+                displayMessage("Please fill in Discord username and amount.", "error");
+                return;
+            }
 
-    if (!discord || !amount) {
-        errorBox.textContent = "Please fill in Discord username and amount.";
-        errorBox.classList.remove("hidden");
-        return;
-    }
+            let idToken = null;
+            const user = firebase.auth().currentUser;
+            if (user) {
+                try {
+                    idToken = await user.getIdToken();
+                } catch (tokenError) {
+                    console.error("Failed to get ID token:", tokenError);
+                    displayMessage("Failed to authenticate your donation. Please try again.", "error");
+                    return;
+                }
+            }
 
-    let idToken = null;
-    const user = firebase.auth().currentUser;
-    if (user) {
-        idToken = await user.getIdToken();
-    }
+            try {
+                const response = await fetch("/donation-initiate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ discord, amount, message, idToken }),
+                });
+                const result = await response.json();
 
-    try {
-        const response = await fetch("/donation-initiate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ discord, amount, message, idToken }),
+                if (result.success) {
+                    displayMessage("Donation submitted successfully! Thank you for your support. Please proceed with PayPal.", "success");
+                    donationForm.reset();
+                } else {
+                    throw new Error(result.error || "Unknown error during donation initiation.");
+                }
+            } catch (err) {
+                console.error("Donation initiation error:", err);
+                displayMessage(`Donation failed: ${err.message}`, "error");
+            }
         });
-        const result = await response.json();
-
-        if (result.success) {
-            successBox.classList.remove("hidden");
-            document.getElementById("donation-form").reset();
-        } else {
-            throw new Error(result.error || "Unknown error");
-        }
-    } catch (err) {
-        errorBox.textContent = err.message;
-        errorBox.classList.remove("hidden");
     }
-});
 
-// Add this to your existing JavaScript
-document.addEventListener('DOMContentLoaded', () => {
+
     // Intersection Observer for section animations
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1493,8 +3287,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Enhanced server status updates
 function updateServerStatus(status) {
     const statusElement = document.getElementById('onlineStatus');
-    statusElement.textContent = status ? 'Online ✅' : 'Offline ❌';
-    statusElement.parentElement.classList.toggle('online', status);
+    if (statusElement) {
+        statusElement.textContent = status ? 'Online ✅' : 'Offline ❌';
+        statusElement.parentElement?.classList.toggle('online', status);
+    }
 }
 
 // Add this to your existing JavaScript
@@ -1503,52 +3299,78 @@ function updateLaunchCountdown() {
     const now = new Date();
     const diff = launchDate - now;
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
     const countdownElement = document.getElementById('launch-countdown');
+    const serverIpDisplay = document.getElementById('server-ip-display');
+    const ipHiddenMessage = document.getElementById('ip-hidden-message');
+    const startPlayingBtn = document.getElementById('start-playing-btn');
+    const eventsCopyIpBtn = document.getElementById('events-copy-ip-btn'); // Get the button in the events section
+
     if (countdownElement) {
-        countdownElement.innerHTML = `
-            <span class="text-green-600">${days}d</span> 
-            <span class="text-amber-600">${hours}h</span> 
-            <span class="text-blue-600">${minutes}m</span> 
-            <span class="text-red-600">${seconds}s</span>
-        `;
+        if (diff <= 0) {
+            countdownElement.innerHTML = `<span class="text-green-600">LIVE NOW!</span>`;
+            // Show IP and enable buttons
+            if (serverIpDisplay) serverIpDisplay.classList.remove('hidden');
+            if (ipHiddenMessage) ipHiddenMessage.classList.add('hidden'); // Hide message
+            if (startPlayingBtn) {
+                startPlayingBtn.classList.remove('hidden');
+                startPlayingBtn.removeAttribute('disabled'); // Ensure button is enabled
+            }
+            if (eventsCopyIpBtn) { // Show and enable the button in events section
+                eventsCopyIpBtn.classList.remove('hidden');
+                eventsCopyIpBtn.removeAttribute('disabled');
+            }
+        } else {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = `
+                <span class="text-green-600">${days}d</span> 
+                <span class="text-amber-600">${hours}h</span> 
+                <span class="text-blue-600">${minutes}m</span> 
+                <span class="text-red-600">${seconds}s</span>
+            `;
+            // Hide IP and show message, disable buttons
+            if (serverIpDisplay) serverIpDisplay.classList.add('hidden');
+            if (ipHiddenMessage) ipHiddenMessage.classList.remove('hidden'); // Show message
+            if (startPlayingBtn) {
+                startPlayingBtn.classList.add('hidden');
+                startPlayingBtn.setAttribute('disabled', 'true');
+            }
+            if (eventsCopyIpBtn) { // Hide and disable the button in events section
+                eventsCopyIpBtn.classList.add('hidden');
+                eventsCopyIpBtn.setAttribute('disabled', 'true');
+            }
+        }
     }
 }
 
 // Update countdown every second
 setInterval(updateLaunchCountdown, 1000);
-updateLaunchCountdown();
+updateLaunchCountdown(); // Call once immediately to set initial state
 
-// ========================
-// ✅ Firebase Dependent Features (Move your existing auth/db code here)
-// ========================
-function setupFirebaseDependentFeatures(auth, db) {
-    // IMPORTANT: Move all your existing JavaScript code that uses 'auth' or 'db'
-    // (e.g., auth.onAuthStateChanged, login/logout button event listeners,
-    // loadUsers, loadPayments, Google authentication, etc.)
-    // INTO THIS FUNCTION BODY.
-
-    // Example of code that should be moved here:
-    // auth.onAuthStateChanged(user => { /* ... */ });
-
-    // document.getElementById('login-btn').addEventListener('click', () => { /* ... */ });
-
-    // function loadUsers(db) { /* ... */ }
-}
-
+// =======================
+// General Modal Functions
+// =======================
 function openModal(id) {
-    document.getElementById(id).classList.remove('hidden');
+    document.getElementById(id)?.classList.remove('hidden');
 }
 
 function closeModal(id) {
-    document.getElementById(id).classList.add('hidden');
+    document.getElementById(id)?.classList.add('hidden');
 }
 </script>
 
+<!-- Custom Message Modal (for alerts) -->
+<div id="message-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-60 hidden">
+    <div class="minecraft-inventory rounded-lg p-8 bg-white relative w-full max-w-xs text-center">
+        <button onclick="closeMessageModal()" class="absolute top-2 right-2 text-xl font-bold text-gray-800">&times;</button>
+        <h2 id="message-title" class="minecraft-font text-xl mb-4"></h2>
+        <p id="message-text" class="text-sm text-gray-800 font-mono mb-6"></p>
+        <button onclick="closeMessageModal()" class="btn-minecraft px-6 py-2 minecraft-font text-xs">OK</button>
+    </div>
+</div>
 
 </body>
 </html>
