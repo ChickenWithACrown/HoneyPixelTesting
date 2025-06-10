@@ -993,8 +993,8 @@ function closeMessageModal() {
 // ========================
 async function updateServerInfo() {
     try {
-        // This is a placeholder IP, replace with your actual server IP and port if needed
-        const response = await fetch("https://api.mcsrvstat.us/3/185.83.152.200:19132"); 
+        // Updated to use the Bedrock API endpoint for mcsrvstat.us
+        const response = await fetch("https://api.mcsrvstat.us/bedrock/3/185.83.152.200:19132"); 
         const data = await response.json();
         document.getElementById("playerCount").textContent = data.players?.online ?? "0";
         document.getElementById("maxPlayers").textContent = data.players?.max ?? "0";
@@ -1287,8 +1287,7 @@ function setupFirebaseDependentFeatures(auth, db) {
     // This function will be called once Firebase auth and DB are initialized.
 
     auth.onAuthStateChanged(async user => {
-        // The dev section element ('#dev') and related logic is entirely removed from here.
-        // It should no longer be referenced in this function.
+        // The dev section element ('#dev') is permanently hidden and its logic removed.
 
         if (user) {
             loginBtn?.classList.add('hidden');
@@ -1312,8 +1311,6 @@ function setupFirebaseDependentFeatures(auth, db) {
             userInfo?.classList.add('hidden');
         }
     });
-
-    // Removed window.loadAllUsers and window.loadPayments as dev tools are permanently removed
 }
 
 
