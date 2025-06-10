@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HoneyPixel Donations</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    // Load PayPal client ID from server
+    fetch('/get-paypal-client-id')
+      .then(response => response.json())
+      .then(data => {
+        const script = document.createElement('script');
+        script.src = `https://www.paypal.com/sdk/js?client-id=${data.clientId}&currency=USD`;
+        document.head.appendChild(script);
+      });
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+    .donation-box {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 400px;
+      margin: auto;
+    }
+    button.preset {
+      margin: 0.5rem;
+      padding: 0.7rem 1.5rem;
+      background: #22c55e;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    input[type="number"] {
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      border: none;
+      margin-top: 1rem;
+      width: 100px;
+      text-align: center;
+    }
+    #paypal-button-container {
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="donation-box">
+    <h1>🍯 Support HoneyPixel</h1>
+    <p>Select a donation amount:</p>
+
+    <div id="presets">
+      <button class="preset" onclick="selectAmount(5)">$5</button>
+      <button class="preset" onclick="selectAmount(10)">$10</button>
+      <button class="preset" onclick="selectAmount(20)">$20</button>
+    </div>
+
+    <p>Or enter a custom amount:</p>
+    <input type="number" id="customAmount" placeholder="USD" min="1" />
+
+     <!-- Stripe Donate Button -->
+<div style="margin-top: 1.5rem;">
+  <button id="stripe-donate-btn" class="preset" style="background: #6366f1;">Donate with Stripe</button>
+</div>
+
+    <div id="paypal-button-container"></div>
+  </div>
+
+
+  <script>
+  let amount = 5; // default amount
+
+  // Load Stripe publishable key from server
+  let stripe;
+  fetch('/get-stripe-key')
+    .then(response => response.json())
+    .then(data => {
+      stripe = Stripe(data.publishableKey);
+    });
+
+  function selectAmount(value) {
+    document.getElementById("customAmount").value = "";
+    amount = value;
+    renderPayPalButton();
+  }
+
+  function renderPayPalButton() {
+    document.getElementById("paypal-button-container").innerHTML = "";
+
+    paypal.Buttons({
+      style: {
+        color: 'gold',
+        shape: 'pill',
+        label: 'paypal',
+      },
+      createOrder: function (data, actions) {
+        const customAmount = parseFloat(document.getElementById("customAmount").value);
+        amount = !isNaN(customAmount) && customAmount > 0 ? customAmount : amount;
+
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: amount.toFixed(2)
+            }
+          }]
+        });
+      },
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (details) {
+          const payerName = details.payer.name?.given_name || "User";
+          const discord = prompt(`Thanks, ${payerName}! 🎉\nEnter your Discord username:`);
+          const message = prompt("Optional: Add a message for the team") || "";
+
+          if (discord) {
+            fetch("/donation-initiate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                discord,
+                amount: amount.toFixed(2),
+                paypalOrderId: data.orderID,
+                payerEmail: details.payer.email_address || "N/A",
+                message
+              })
+            })
+            .then(() => {
+              alert("✅ Donation received! Thank you!");
+            })
+            .catch(() => {
+              alert("⚠️ Donation was successful but we couldn't log it. Please create a support ticket.");
+            });
+          } else {
+            alert("Donation completed, but no username was submitted.");
+          }
+        });
+      },
+      onError: function (err) {
+        console.error("PayPal Error:", err);
+        alert("Something went wrong with PayPal.");
+      }
+    }).render('#paypal-button-container');
+  }
+
+  renderPayPalButton();
+
+  // Stripe payment
+  document.getElementById("stripe-donate-btn").addEventListener("click", async () => {
+    const customAmount = parseFloat(document.getElementById("customAmount").value);
+    const finalAmount = !isNaN(customAmount) && customAmount > 0 ? customAmount : amount;
+
+    const discord = prompt("Enter your Discord username:");
+    if (!discord) {
+      alert("Please enter your Discord username.");
+      return;
+    }
+
+    const message = prompt("Optional: Add a message for the team") || "";
+
+    // Get Firebase token if user is logged in
+    let idToken = null;
+    try {
+      const user = firebase?.auth()?.currentUser;
+      if (user) idToken = await user.getIdToken();
+    } catch (err) {
+      console.warn("No Firebase user logged in.");
+    }
+
+    try {
+      const response = await fetch("/create-stripe-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: finalAmount, discord, message, idToken })
+      });
+
+      const result = await response.json();
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        throw new Error(result.error || "Something went wrong with Stripe.");
+      }
+    } catch (err) {
+      alert(err.message);
+      console.error(err);
+    }
+  });
+  </script>
+</body>
+</html>
