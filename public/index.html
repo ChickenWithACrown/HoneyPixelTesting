@@ -36,7 +36,15 @@
     .minecraft-block {
         background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #4a2c17 100%);
         border: 2px solid #2d1810;
-        box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3), inset -2px -2px 4px rgba(0,0,0,0.3);
+        box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3), inset -2px -2px 4px rgba(0,0,0,0.3),
+                    0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-block:hover {
+        transform: translateY(-2px);
+        box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3), inset -2px -2px 4px rgba(0,0,0,0.3),
+                    0 6px 12px rgba(0,0,0,0.3);
     }
 
     .grass-block {
@@ -72,29 +80,59 @@
         border: 3px solid #3e2723;
         color: white;
         text-shadow: 2px 2px 0px #000;
-        transition: all 0.1s ease;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
     }
 
-        .btn-minecraft:hover {
-            background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
-            transform: translateY(-2px);
-        }
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
 
-        .btn-minecraft:active {
-            transform: translateY(0px);
-            box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
-        }
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
 
-    .pixelated {
-        image-rendering: pixelated;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: crisp-edges;
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
     }
 
     .minecraft-inventory {
         background: #c6c6c6;
         border: 3px solid #000;
-        box-shadow: inset 3px 3px 0px #fff, inset -3px -3px 0px #5a5a5a;
+        box-shadow: inset 3px 3px 0px #fff, inset -3px -3px 0px #5a5a5a,
+                    0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, inset -3px -3px 0px #5a5a5a,
+                    0 6px 12px rgba(0,0,0,0.3);
     }
 
     .inventory-slot {
@@ -160,24 +198,7 @@
         justify-content: center;
     }
 
-    :root {
-        --bg-color: #ffffff;
-        --text-color: #000000;
-    }
-
-    [data-theme="dark"] {
-        --bg-color: #121212;
-        --text-color: #ffffff;
-    }
-
-    body {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        font-family: 'Segoe UI', sans-serif;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    <!-- Toggle Light/Dark -->
+    /* Toggle Light/Dark */
     :root {
         --bg-color: #ffffff;
         --text-color: #000000;
@@ -217,112 +238,422 @@
     main {
         text-align: center;
         padding: 3rem;
-:root {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-}
+    }
 
-[data-theme="dark"] {
-  --bg-color: #121212;
-  --text-color: #ffffff;
-}
+    /* Header & Nav */
+    header {
+        background-color: #1e293b;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: 'Segoe UI', sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin: 0;
-}
+    .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
 
-/* Header & Nav */
-header {
-  background-color: #1e293b;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
+    .nav-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
 
-.nav-toggle {
-  display: none;
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  color: var(--text-color);
-  cursor: pointer;
-}
+    .nav-menu.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 1rem;
+    }
 
-.nav-menu {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
+    /* Mobile Responsive Nav */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+        }
 
-.nav-menu.show {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-color: var(--bg-color);
-  padding: 1rem;
-}
+        .nav-toggle {
+            display: block;
+        }
 
-/* Mobile Responsive Nav */
-@media (max-width: 768px) {
-  .nav-menu {
-    display: none;
-  }
+        .nav-menu.show {
+            display: flex;
+        }
+    }
 
-  .nav-toggle {
-    display: block;
-  }
+    /* Button Styles */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
 
-  .nav-menu.show {
-    display: flex;
-  }
-}
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+    }
 
-/* Button Styles */
-.btn-minecraft {
-  background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
-  border: 3px solid #3e2723;
-  color: white;
-  text-shadow: 2px 2px 0px #000;
-  padding: 0.6rem 1rem;
-  border-radius: 0.375rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.1s ease;
-}
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
 
-.btn-minecraft:hover {
-  background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
-  transform: translateY(-2px);
-}
+    .btn-security-warning {
+        background: linear-gradient(to bottom, #b91c1c, #7f1d1d);
+        color: #fff;
+        border: 3px solid #450a0a;
+        text-shadow: 1px 1px 0 #000;
+        box-shadow: 0 0 10px rgba(185, 28, 28, 0.7);
+        border-radius: 6px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+    .btn-security-warning:hover {
+        background: linear-gradient(to bottom, #dc2626, #991b1b);
+    }
 
-.btn-minecraft:active {
-  transform: translateY(0px);
-  box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
-}
+    /* Minecraft-like Animations */
+    @keyframes scroll {
+        from { background-position: 0 0; }
+        to { background-position: 100% 100%; }
+    }
 
-.btn-security-warning {
-    background: linear-gradient(to bottom, #b91c1c, #7f1d1d);
-    color: #fff;
-    border: 3px solid #450a0a;
-    text-shadow: 1px 1px 0 #000;
-    box-shadow: 0 0 10px rgba(185, 28, 28, 0.7);
-    border-radius: 6px;
-    font-weight: bold;
-    transition: background 0.3s ease;
-}
-.btn-security-warning:hover {
-    background: linear-gradient(to bottom, #dc2626, #991b1b);
-}
+    .animate-scroll {
+        animation: scroll 20s linear infinite;
+    }
 
+    /* Enhanced Minecraft Blocks */
+    .minecraft-block {
+        background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #4a2c17 100%);
+        border: 2px solid #2d1810;
+        box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3), 
+                   inset -2px -2px 4px rgba(0,0,0,0.3),
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
 
+    .minecraft-block:hover {
+        transform: translateY(-2px);
+        box-shadow: inset 2px 2px 4px rgba(255,255,255,0.3), 
+                   inset -2px -2px 4px rgba(0,0,0,0.3),
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Enhanced Buttons */
+    .btn-minecraft {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+        border: 3px solid #3e2723;
+        color: white;
+        text-shadow: 2px 2px 0px #000;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #a1887f 0%, #6d4c41 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-minecraft:active {
+        transform: translateY(0px);
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn-minecraft::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+
+    .btn-minecraft:hover::after {
+        animation: shine 1.5s infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        background: #c6c6c6;
+        border: 3px solid #000;
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .minecraft-inventory:hover {
+        box-shadow: inset 3px 3px 0px #fff, 
+                   inset -3px -3px 0px #5a5a5a,
+                   0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Pixel Art Border */
+    .pixel-border {
+        border: 4px solid;
+        border-image: url("data:image/svg+xml,%3csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3e%3cdefs%3e%3cpattern id='a' patternUnits='userSpaceOnUse' width='10' height='10'%3e%3cpath d='M0 0h5v5H0zm5 5h5v5H5z' fill='%23000'/%3e%3c/pattern%3e%3c/defs%3e%3cpath fill='url(%23a)' d='M0 0h100v100H0z'/%3e%3c/svg%3e") 4;
+    }
+
+    /* Dark Mode Enhancements */
+    [data-theme="dark"] .minecraft-inventory {
+        background: #2d2d2d;
+        border-color: #000;
+        box-shadow: inset 3px 3px 0px #4a4a4a, 
+                   inset -3px -3px 0px #1a1a1a;
+    }
+
+    [data-theme="dark"] .btn-minecraft {
+        background: linear-gradient(to bottom, #6d4c41 0%, #4e342e 100%);
+        border-color: #2d1810;
+    }
+
+    [data-theme="dark"] .btn-minecraft:hover {
+        background: linear-gradient(to bottom, #8d6e63 0%, #5d4037 100%);
+    }
+
+    /* Enhanced Animations & Effects */
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes glow {
+        0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+    }
+
+    /* Enhanced Block Effects */
+    .minecraft-block {
+        animation: float 6s ease-in-out infinite;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .gold-block {
+        animation: glow 3s ease-in-out infinite;
+    }
+
+    .diamond-block {
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    /* Enhanced Button Effects */
+    .btn-minecraft {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-minecraft::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        transition: 0.5s;
+    }
+
+    .btn-minecraft:hover::before {
+        left: 100%;
+    }
+
+    /* Enhanced Inventory UI */
+    .minecraft-inventory {
+        backdrop-filter: blur(5px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .minecraft-inventory:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Particle Background */
+    .particle-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.1;
+        background-image: 
+            radial-gradient(circle at 25% 25%, #facc15 1px, transparent 1px),
+            radial-gradient(circle at 75% 75%, #facc15 1px, transparent 1px);
+        background-size: 50px 50px;
+        animation: particleMove 20s linear infinite;
+    }
+
+    @keyframes particleMove {
+        0% { background-position: 0 0; }
+        100% { background-position: 50px 50px; }
+    }
+
+    /* Enhanced Section Transitions */
+    section {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    section.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Enhanced Text Effects */
+    .minecraft-font {
+        text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+        letter-spacing: 1px;
+    }
+
+    /* Enhanced Dark Mode */
+    [data-theme="dark"] {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+        --block-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="dark"] .minecraft-inventory {
+        background: rgba(45, 45, 45, 0.9);
+        border-color: #2d2d2d;
+    }
+
+    [data-theme="dark"] .btn-minecraft {
+        background: linear-gradient(to bottom, #6d4c41 0%, #4e342e 100%);
+        border-color: #2d1810;
+    }
+
+    /* Enhanced Loading States */
+    .loading {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .loading::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    /* Enhanced Modal Transitions */
+    .modal {
+        opacity: 0;
+        transform: scale(0.9);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .modal.show {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Enhanced Server Status */
+    .status-indicator {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    .status-indicator::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+        background: #ef4444;
+        transition: all 0.3s ease;
+    }
+
+    .status-indicator.online::before {
+        background: #22c55e;
+        box-shadow: 0 0 10px #22c55e;
+    }
+
+    .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .tech-stack span {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-family: monospace;
+    }
+
+    @keyframes codeScroll {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-100%); }
+    }
+
+    .code-bg {
+        animation: codeScroll 20s linear infinite;
+    }
 </style>
 
 
@@ -334,10 +665,10 @@ header {
 
     <!-- Logo & Title -->
     <div class="flex items-center space-x-3">
-      <div class="w-12 h-12 gold-block rounded flex items-center justify-center">
+      <div class="w-12 h-12 gold-block rounded flex items-center justify-center hover:scale-110 transition-transform">
         <span class="text-2xl">🐝</span>
       </div>
-      <h1 class="minecraft-font text-2xl text-amber-900">HoneyPixelMC</h1>
+      <h1 class="minecraft-font text-2xl text-amber-900 hover:text-amber-700 transition-colors">HoneyPixelMC</h1>
     </div>
 
       <!-- 🧭 Mobile-collapsible nav + auth buttons -->
@@ -345,20 +676,20 @@ header {
 
   <!-- Navigation Links -->
   <nav class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-    <a href="#home" class="btn-minecraft px-4 py-2 minecraft-font text-xs">HOME</a>
-    <a href="#features" class="btn-minecraft px-4 py-2 minecraft-font text-xs">FEATURES</a>
-    <a href="#events" class="btn-minecraft px-4 py-2 minecraft-font text-xs">EVENTS</a>
-    <a href="/donate.html" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DONATE</a>
-    <a href="https://discord.gg/YU25e7Mn9b" class="btn-minecraft px-4 py-2 minecraft-font text-xs">DISCORD</a>
+    <a href="#home" class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-105 transition-transform">HOME</a>
+    <a href="#features" class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-105 transition-transform">FEATURES</a>
+    <a href="#events" class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-105 transition-transform">EVENTS</a>
+    <a href="/donate.html" class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-105 transition-transform">DONATE</a>
+    <a href="https://discord.gg/YU25e7Mn9b" class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-105 transition-transform">DISCORD</a>
   </nav>
 
   <!-- Auth & Utility -->
   <div id="auth-section" class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-    <button id="login-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs">LOGIN</button>
+    <button id="login-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-105 transition-transform">LOGIN</button>
     <span id="user-info" class="minecraft-font text-xs text-amber-900 hidden"></span>
-    <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden">LOGOUT</button>
-    <button id="theme-toggle" class="btn-minecraft px-4 py-2 minecraft-font text-xs">🌙 Dark Mode</button>
-    <button onclick="visitShop()" class="btn-minecraft px-4 py-2 minecraft-font text-xs">🛍️ SHOP</button>
+    <button id="logout-btn" class="btn-minecraft px-4 py-2 minecraft-font text-xs hidden hover:scale-105 transition-transform">LOGOUT</button>
+    <button id="theme-toggle" class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-105 transition-transform">🌙 Dark Mode</button>
+    <button onclick="visitShop()" class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-105 transition-transform">🛍️ SHOP</button>
   </div>
 
 </div>
@@ -406,39 +737,45 @@ header {
     </div>
 
     <!-- Hero Section -->
-    <section id="home" class="text-center py-16 px-4">
-        <div class="container mx-auto">
-            <div class="mb-8">
-                <div class="w-32 h-32 mx-auto minecraft-block rounded-lg flex items-center justify-center mb-6 pixelated">
+    <section id="home" class="text-center py-16 px-4 relative overflow-hidden">
+        <!-- Animated Background -->
+        <div class="absolute inset-0 bg-[url('/image/grass.png')] opacity-10 animate-scroll"></div>
+        
+        <div class="container mx-auto relative z-10">
+            <div class="mb-8 transform hover:scale-105 transition-transform duration-300">
+                <div class="w-32 h-32 mx-auto minecraft-block rounded-lg flex items-center justify-center mb-6 pixelated shadow-lg">
                     <span class="text-6xl">🍯</span>
                 </div>
             </div>
-            <div class="text-center mt-10 mb-8">
-            <img src="/image/Title.png" alt="Honey Lifesteal Logo" class="logo pixelated mx-auto max-w-[90%] sm:max-w-[400px]" />
+            
+            <div class="text-center mt-10 mb-8 transform hover:scale-105 transition-transform duration-300">
+                <img src="/image/Title.png" alt="Honey Lifesteal Logo" class="logo pixelated mx-auto max-w-[90%] sm:max-w-[400px] drop-shadow-lg" />
             </div>
 
-            <p class="text-lg mb-8 max-w-2xl mx-auto text-gray-700 font-mono">
+            <p class="text-lg mb-8 max-w-2xl mx-auto text-gray-700 font-mono bg-white/80 p-4 rounded-lg shadow-md">
                 &gt; A cozy Minecraft server where community comes first<br />
                 &gt; Build, explore, and make friends in our blocky world<br />
                 &gt; Survival • Economy • Events • Community
             </p>
-            <div class="minecraft-inventory rounded-lg p-6 inline-block mb-8">
+            
+            <div class="minecraft-inventory rounded-lg p-6 inline-block mb-8 transform hover:scale-105 transition-transform duration-300 shadow-lg">
                 <div class="minecraft-font text-lg text-green-800 mb-3">SERVER INFO</div>
-                <div class="text-2xl font-mono font-bold text-amber-700 mb-2">
+                <div class="text-2xl font-mono font-bold text-amber-700 mb-2 hover:text-amber-600 transition-colors cursor-pointer" onclick="copyServerIP()">
                     lifesteal.honeypixelmc.com
                 </div>
                 <div class="grid grid-cols-2 gap-4 text-sm">
-                    <div>VERSION: <span id="serverVersion">Loading...</span></div>
-                    <div>TYPE: <span id="serverType">Loading...</span></div>
-                    <div>PLAYERS: <span id="playerCount">Loading...</span>/<span id="maxPlayers">Loading...</span></div>
-                    <div>STATUS: <span id="onlineStatus">Loading...</span></div>
+                    <div>VERSION: <span id="serverVersion" class="text-blue-600">Loading...</span></div>
+                    <div>TYPE: <span id="serverType" class="text-green-600">Loading...</span></div>
+                    <div>PLAYERS: <span id="playerCount" class="text-amber-600">Loading...</span>/<span id="maxPlayers" class="text-amber-600">Loading...</span></div>
+                    <div>STATUS: <span id="onlineStatus" class="text-red-600">Loading...</span></div>
                 </div>
             </div>
+            
             <div class="flex justify-center space-x-4 mt-8">
-                <button onclick="copyServerIP()" class="btn-minecraft px-8 py-4 minecraft-font text-sm">
+                <button onclick="copyServerIP()" class="btn-minecraft px-8 py-4 minecraft-font text-sm hover:scale-105 transition-transform shadow-lg">
                     START PLAYING
                 </button>
-                <button onclick="openRulesModal()" class="stone-block text-white px-8 py-4 minecraft-font text-sm">
+                <button onclick="openRulesModal()" class="stone-block text-white px-8 py-4 minecraft-font text-sm hover:scale-105 transition-transform shadow-lg">
                     SERVER RULES
                 </button>
             </div>
@@ -571,11 +908,70 @@ header {
         <div class="container mx-auto text-center">
             <h2 class="minecraft-font text-4xl mb-12 text-amber-800">UPCOMING EVENTS</h2>
 
-            <div class="minecraft-inventory rounded-lg mx-auto p-8 max-w-lg bg-white bg-opacity-90 shadow-lg">
-                <div class="text-4xl text-green-700 minecraft-font mb-4">COMING SOON</div>
-                <p class="text-sm text-gray-800 font-mono">
-                    🏆 Check back soon for epic events, build battles, minigames and more! 🧱
-                </p>
+            <div class="minecraft-inventory rounded-lg mx-auto p-8 max-w-2xl bg-white bg-opacity-90 shadow-lg relative overflow-hidden group">
+                <!-- Event Background Effect -->
+                <div class="absolute inset-0 opacity-5 pointer-events-none">
+                    <div class="absolute inset-0 bg-[url('/image/grass.png')] opacity-10 animate-scroll"></div>
+                </div>
+
+                <!-- Event Content -->
+                <div class="relative z-10">
+                    <!-- Event Date -->
+                    <div class="minecraft-font text-3xl text-green-700 mb-4 animate-pulse">
+                        JUNE 28TH, 2025
+                    </div>
+
+                    <!-- Event Title -->
+                    <div class="minecraft-font text-4xl text-amber-800 mb-6 transform group-hover:scale-105 transition-transform duration-300">
+                        🎉 SERVER LAUNCH DAY! 🎉
+                    </div>
+
+                    <!-- Event Description -->
+                    <div class="text-sm text-gray-800 font-mono space-y-4 mb-6">
+                        <p class="leading-relaxed">
+                            &gt; Join us for the grand opening of HoneyPixelMC!<br>
+                            &gt; Experience our unique survival world with friends<br>
+                            &gt; Special launch day rewards and events
+                        </p>
+                    </div>
+
+                    <!-- Event Features -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="minecraft-block p-3 rounded-lg transform hover:scale-105 transition-transform duration-300">
+                            <span class="text-2xl mb-2 block">🎁</span>
+                            <div class="minecraft-font text-sm">Launch Rewards</div>
+                        </div>
+                        <div class="minecraft-block p-3 rounded-lg transform hover:scale-105 transition-transform duration-300">
+                            <span class="text-2xl mb-2 block">🏆</span>
+                            <div class="minecraft-font text-sm">Special Events</div>
+                        </div>
+                        <div class="minecraft-block p-3 rounded-lg transform hover:scale-105 transition-transform duration-300">
+                            <span class="text-2xl mb-2 block">🎮</span>
+                            <div class="minecraft-font text-sm">Minigames</div>
+                        </div>
+                    </div>
+
+                    <!-- Countdown Timer -->
+                    <div class="minecraft-font text-lg text-amber-700 mb-6">
+                        <div class="text-sm mb-2">LAUNCHING IN:</div>
+                        <div id="launch-countdown" class="text-2xl font-bold">
+                            Loading...
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="copyServerIP()" class="btn-minecraft px-6 py-3 minecraft-font text-sm hover:scale-105 transition-transform">
+                            📋 COPY IP
+                        </button>
+                        <a href="https://discord.gg/YU25e7Mn9b" target="_blank" class="btn-minecraft px-6 py-3 minecraft-font text-sm hover:scale-105 transition-transform">
+                            🎮 JOIN DISCORD
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hover Effect -->
+                <div class="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-amber-500/10 to-amber-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
         </div>
     </section>
@@ -617,13 +1013,60 @@ header {
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
       <!-- Dev Card -->
-      <div class="minecraft-inventory p-4 rounded-lg bg-white shadow-md">
-        <h3 class="minecraft-font text-xl text-amber-800 mb-2">ChickenWithACrown</h3>
-        <p class="text-sm text-gray-700 font-mono mb-2">Lead Developer</p>
-        <p class="text-xs text-gray-600 font-mono mb-3">Handles backend, server setup, and features and more</p>
-        <div class="flex justify-center space-x-4 text-sm">
-          <a href="https://www.youtube.com/@ChickenWithACrown" target="_blank" class="btn-minecraft px-4 py-1 minecraft-font text-xs">YouTube</a>
-          <a href="https://cash.app/$DanielUpperman06" target="_blank" class="stone-block px-4 py-1 text-white minecraft-font text-xs">CashApp</a>
+      <div class="minecraft-inventory p-6 rounded-lg bg-white shadow-md transform hover:scale-105 transition-all duration-300 relative overflow-hidden group">
+        <!-- Code Background Effect -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none">
+          <pre class="text-xs font-mono text-green-600 whitespace-pre">
+            function devCode() {
+              while(true) {
+                createAwesome();
+                fixBugs();
+                drinkCoffee();
+              }
+            }
+          </pre>
+        </div>
+
+        <!-- Dev Avatar -->
+        <div class="relative z-10 mb-4">
+          <div class="w-24 h-24 mx-auto diamond-block rounded-full flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
+            <span class="text-4xl">👑</span>
+          </div>
+        </div>
+
+        <!-- Dev Info -->
+        <div class="relative z-10">
+          <h3 class="minecraft-font text-2xl text-amber-800 mb-2 group-hover:text-amber-600 transition-colors">ChickenWithACrown</h3>
+          <div class="minecraft-font text-sm text-gray-700 mb-3 bg-amber-50 p-2 rounded-lg inline-block">
+            Lead Developer
+          </div>
+          <p class="text-sm text-gray-600 font-mono mb-4 leading-relaxed">
+            &gt; Backend Wizard<br>
+            &gt; Server Architect<br>
+            &gt; Feature Creator
+          </p>
+
+          <!-- Tech Stack -->
+          <div class="flex flex-wrap justify-center gap-2 mb-4">
+            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Node.js</span>
+            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Firebase</span>
+            <span class="px-2 py-1 text-xs font-mono bg-gray-100 rounded">Minecraft</span>
+          </div>
+
+          <!-- Social Links -->
+          <div class="flex justify-center space-x-3">
+            <a href="https://www.youtube.com/@ChickenWithACrown" target="_blank" 
+               class="btn-minecraft px-4 py-2 minecraft-font text-xs hover:scale-110 transition-transform flex items-center">
+              <span class="mr-1">🎥</span> YouTube
+            </a>
+            <a href="https://cash.app/$DanielUpperman06" target="_blank" 
+               class="stone-block px-4 py-2 text-white minecraft-font text-xs hover:scale-110 transition-transform flex items-center">
+              <span class="mr-1">💸</span> CashApp
+            </a>
+          </div>
+
+          <!-- Hover Effect -->
+          <div class="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-amber-500/10 to-amber-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
       </div>
     </div>
@@ -683,19 +1126,15 @@ header {
 // ========================
 // ✅ Firebase Setup
 // ========================
-const firebaseConfig = {
-    apiKey: "AIzaSyCUJnt4VflBK5xqmmLWMSjzumpB9z6kUTY",
-    authDomain: "honeypixel-1257f.firebaseapp.com",
-    databaseURL: "https://honeypixel-1257f-default-rtdb.firebaseio.com/",
-    projectId: "honeypixel-1257f",
-    storageBucket: "honeypixel-1257f.firebasestorage.app",
-    messagingSenderId: "650984530130",
-    appId: "1:650984530130:web:f49ee907dbe91105764d0b",
-    measurementId: "G-KMYDLCB0GX"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
+let firebaseConfig;
+fetch('/get-firebase-config')
+  .then(response => response.json())
+  .then(config => {
+    firebaseConfig = config;
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+  });
 
 // ========================
 // 🖥 Server Status Updater
@@ -1017,6 +1456,66 @@ document.getElementById("donation-form")?.addEventListener("submit", async (e) =
         errorBox.classList.remove("hidden");
     }
 });
+
+// Add this to your existing JavaScript
+document.addEventListener('DOMContentLoaded', () => {
+    // Intersection Observer for section animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
+    });
+
+    // Enhanced modal handling
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+    });
+});
+
+// Enhanced server status updates
+function updateServerStatus(status) {
+    const statusElement = document.getElementById('onlineStatus');
+    statusElement.textContent = status ? 'Online ✅' : 'Offline ❌';
+    statusElement.parentElement.classList.toggle('online', status);
+}
+
+// Add this to your existing JavaScript
+function updateLaunchCountdown() {
+    const launchDate = new Date('2025-06-28T00:00:00');
+    const now = new Date();
+    const diff = launchDate - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const countdownElement = document.getElementById('launch-countdown');
+    if (countdownElement) {
+        countdownElement.innerHTML = `
+            <span class="text-green-600">${days}d</span> 
+            <span class="text-amber-600">${hours}h</span> 
+            <span class="text-blue-600">${minutes}m</span> 
+            <span class="text-red-600">${seconds}s</span>
+        `;
+    }
+}
+
+// Update countdown every second
+setInterval(updateLaunchCountdown, 1000);
+updateLaunchCountdown();
 </script>
 
 
