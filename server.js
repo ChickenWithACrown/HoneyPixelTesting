@@ -5,7 +5,17 @@ require('dotenv').config();
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const admin = require("firebase-admin");
-const serviceAccount = require("./Key.json");
+
+// Firebase Admin Setup with environment variables
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+  }),
+  databaseURL: process.env.FIREBASE_DATABASE_URL
+});
+const db = admin.database();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -14,13 +24,6 @@ const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 // In-memory fallback for anonymous users
 const inMemoryDonations = {};
-
-// Firebase Admin Setup
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://honeypixel-1257f-default-rtdb.firebaseio.com/"
-});
-const db = admin.database();
 
 // Stripe Webhook - must come BEFORE express.json()
 app.post("/stripe-webhook", express.raw({ type: "application/json" }), async (req, res) => {
