@@ -425,7 +425,7 @@ header {
             <div class="minecraft-inventory rounded-lg p-6 inline-block mb-8">
                 <div class="minecraft-font text-lg text-green-800 mb-3">SERVER INFO</div>
                 <div class="text-2xl font-mono font-bold text-amber-700 mb-2">
-                    play.honeypixelmc.com
+                    lifesteal.honeypixelmc.com
                 </div>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>VERSION: <span id="serverVersion">Loading...</span></div>
@@ -702,7 +702,7 @@ const db = firebase.database();
 // ========================
 async function updateServerInfo() {
     try {
-        const response = await fetch("https://api.mcsrvstat.us/3/play.honeypixelmc.com");
+        const response = await fetch("https://api.mcsrvstat.us/3/lifesteal.honeypixelmc.com");
         const data = await response.json();
         document.getElementById("playerCount").textContent = data.players?.online ?? "0";
         document.getElementById("maxPlayers").textContent = data.players?.max ?? "0";
@@ -754,7 +754,7 @@ function visitShop() {
     window.open("https://honeypixelmc.com/shop", "_blank");
 }
 function copyServerIP() {
-    const ip = "play.honeypixelmc.com";
+    const ip = "lifesteal.honeypixelmc.com";
     navigator.clipboard.writeText(ip)
         .then(() => alert(`✅ Server IP copied: ${ip}`))
         .catch(() => alert("⚠️ Could not copy IP."));
@@ -788,7 +788,7 @@ function openGuidePage(page) {
     const guides = {
         join: {
             title: "How to Join",
-            content: "Launch Minecraft ➤ Add Server ➤ IP: play.honeypixelmc.com ➤ Join and play!"
+            content: "Launch Minecraft ➤ Add Server ➤ IP: lifesteal.honeypixelmc.com ➤ Join and play!"
         },
         claim: {
             title: "How to Claim",
