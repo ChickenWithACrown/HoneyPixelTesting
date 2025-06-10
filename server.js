@@ -1,14 +1,16 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const path = require("path");
-const stripe = require("stripe")("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");
+require('dotenv').config();
+
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const admin = require("firebase-admin");
 const serviceAccount = require("./Key.json");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
-const webhookURL = "https://discord.com/api/webhooks/1375197337776816160/BAdZrqJED6OQXeQj46zMCcs53o6gh3CfTiYHeOlBNrhH2lESTLEWE2m6CTy-qufoJhn4";
-const stripeWebhookSecret = "whsec_OxU91TwSj9f3DA71o9AHkXS2onFzd1Id";
+const webhookURL = process.env.DISCORD_WEBHOOK_URL;
+const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 // In-memory fallback for anonymous users
 const inMemoryDonations = {};
@@ -211,6 +213,29 @@ app.post("/paypal-webhook", async (req, res) => {
   }
 
   res.sendStatus(200);
+});
+
+// Endpoints to securely provide API keys to frontend
+app.get('/get-paypal-client-id', (req, res) => {
+  res.json({ clientId: process.env.PAYPAL_CLIENT_ID_DONATE });
+});
+
+app.get('/get-stripe-key', (req, res) => {
+  res.json({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY });
+});
+
+// Endpoint to securely provide Firebase config
+app.get('/get-firebase-config', (req, res) => {
+  res.json({
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  });
 });
 
 // Start the server
