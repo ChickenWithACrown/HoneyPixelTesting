@@ -1127,13 +1127,16 @@
 // ✅ Firebase Setup
 // ========================
 let firebaseConfig;
+let auth;
+let db;
+
 fetch('/get-firebase-config')
   .then(response => response.json())
   .then(config => {
     firebaseConfig = config;
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
+    auth = firebase.auth();
+    db = firebase.database();
   });
 
 // ========================
