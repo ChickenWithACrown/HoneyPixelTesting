@@ -4,8 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HoneyPixel Donations</title>
-<script src="https://www.paypal.com/sdk/js?client-id=AdtThNsXNlFhu8qEyQ2v0DuODtY-5ikr0cqGFJVgWdSwgo4HXJZTzxgP_wdGDuDFCKRE_l-fShMENu88"></script>
-<script src="https://js.stripe.com/v3/"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    // Load PayPal client ID from server
+    fetch('/get-paypal-client-id')
+      .then(response => response.json())
+      .then(data => {
+        const script = document.createElement('script');
+        script.src = `https://www.paypal.com/sdk/js?client-id=${data.clientId}&currency=USD`;
+        document.head.appendChild(script);
+      });
+  </script>
 
   <style>
     body {
@@ -69,6 +78,14 @@
 
   <script>
   let amount = 5; // default amount
+
+  // Load Stripe publishable key from server
+  let stripe;
+  fetch('/get-stripe-key')
+    .then(response => response.json())
+    .then(data => {
+      stripe = Stripe(data.publishableKey);
+    });
 
   function selectAmount(value) {
     document.getElementById("customAmount").value = "";
@@ -138,8 +155,6 @@
   renderPayPalButton();
 
   // Stripe payment
-  const stripe = Stripe("pk_live_51RSFRpKCcjnqBpWjC1HRr6dbmfEut1CsTUuyUgdSKmLGXqheIwHuXWMOwNv6IlripgV9okkjgsYyxSUryecsSvI7007oVeryUB");
-
   document.getElementById("stripe-donate-btn").addEventListener("click", async () => {
     const customAmount = parseFloat(document.getElementById("customAmount").value);
     const finalAmount = !isNaN(customAmount) && customAmount > 0 ? customAmount : amount;
