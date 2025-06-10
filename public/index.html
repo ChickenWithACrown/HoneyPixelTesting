@@ -1137,6 +1137,9 @@ fetch('/get-firebase-config')
     firebase.initializeApp(firebaseConfig);
     auth = firebase.auth();
     db = firebase.database();
+
+    // Call the new function to set up authentication and database features
+    setupFirebaseDependentFeatures(auth, db);
   });
 
 // ========================
@@ -1519,6 +1522,31 @@ function updateLaunchCountdown() {
 // Update countdown every second
 setInterval(updateLaunchCountdown, 1000);
 updateLaunchCountdown();
+
+// ========================
+// ✅ Firebase Dependent Features (Move your existing auth/db code here)
+// ========================
+function setupFirebaseDependentFeatures(auth, db) {
+    // IMPORTANT: Move all your existing JavaScript code that uses 'auth' or 'db'
+    // (e.g., auth.onAuthStateChanged, login/logout button event listeners,
+    // loadUsers, loadPayments, Google authentication, etc.)
+    // INTO THIS FUNCTION BODY.
+
+    // Example of code that should be moved here:
+    // auth.onAuthStateChanged(user => { /* ... */ });
+
+    // document.getElementById('login-btn').addEventListener('click', () => { /* ... */ });
+
+    // function loadUsers(db) { /* ... */ }
+}
+
+function openModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.add('hidden');
+}
 </script>
 
 
